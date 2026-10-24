@@ -1,0 +1,323 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Venture Capital Team
+#
+# Specialist venture-capital investment committee for startup deal screening,
+# diligence pressure-testing, and investment memo synthesis.
+# ─────────────────────────────────────────────────────────────────────────────
+
+team:
+  name: venture-capital-team
+  description: >
+    Venture-capital investment committee that classifies startup deals,
+    orchestrates specialist diligence lenses, preserves a full board record,
+    and returns a final investment memo with recommendation, tensions, and next
+    diligence steps.
+  version: "0.1.0"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: deliberation
+  capabilities:
+    - venture-capital
+    - startups
+    - investing
+    - deal-screening
+    - due-diligence
+    - investment-memo
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+        description: Deal memo, pitch materials, diligence notes, or fund thesis for committee review.
+  output_contract:
+    artifacts:
+      - path: output/minutes.md
+        required: true
+        description: Full meeting record with round-by-round agent responses and committee tensions.
+      - path: output/investment-memo.md
+        required: true
+        description: Final venture investment memo with recommendation, tensions, risk register, and next actions.
+    completion_artifact: output/investment-memo.md
+
+agents:
+  - name: vc-deal-evaluator
+    type: agent
+    role: >
+      Classifies the deal, selects the committee, forces productive tension,
+      preserves the board record, and synthesizes the final investment memo.
+    tools:
+      - set_roster
+      - create_brief
+      - converse
+    agent_file: ../../agents/vc-deal-evaluator/vc-deal-evaluator.md
+    experience_enabled: true
+    color: 208
+    produces:
+      - path: output/minutes.md
+      - path: output/investment-memo.md
+
+  - name: vc-market-analyst
+    type: agent
+    role: Market size, competition, and domain dynamics.
+    tools: []
+    agent_file: ../../agents/vc-market-analyst/vc-market-analyst.md
+    experience_enabled: true
+    color: 39
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-contrarian-red-team
+    type: agent
+    role: Bear case, thesis stress-test, and hidden-assumption challenge.
+    tools: []
+    agent_file: ../../agents/vc-contrarian-red-team/vc-contrarian-red-team.md
+    experience_enabled: true
+    color: 196
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-founder-assessor
+    type: agent
+    role: Founder-market fit, team quality, and coachability.
+    tools: []
+    agent_file: ../../agents/vc-founder-assessor/vc-founder-assessor.md
+    experience_enabled: true
+    color: 220
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-financial-modeler
+    type: agent
+    role: Unit economics, valuation logic, and return math.
+    tools: []
+    agent_file: ../../agents/vc-financial-modeler/vc-financial-modeler.md
+    experience_enabled: true
+    color: 118
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-deal-structurer
+    type: agent
+    role: Terms, downside protection, and governance structure.
+    tools: []
+    agent_file: ../../agents/vc-deal-structurer/vc-deal-structurer.md
+    experience_enabled: true
+    color: 45
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-technology-evaluator
+    type: agent
+    role: Technical differentiation, moat depth, and diligence risk.
+    tools: []
+    agent_file: ../../agents/vc-technology-evaluator/vc-technology-evaluator.md
+    experience_enabled: true
+    color: 81
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-futurist-thesis-alignment
+    type: agent
+    role: Macro scenario stress-testing and thesis durability.
+    tools: []
+    agent_file: ../../agents/vc-futurist-thesis-alignment/vc-futurist-thesis-alignment.md
+    experience_enabled: true
+    color: 141
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-portfolio-strategist
+    type: agent
+    role: Portfolio fit, concentration risk, and LP narrative.
+    tools: []
+    agent_file: ../../agents/vc-portfolio-strategist/vc-portfolio-strategist.md
+    experience_enabled: true
+    color: 69
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-pattern-matcher
+    type: agent
+    role: Historical analogies, trajectory archetypes, and failure signatures.
+    tools: []
+    agent_file: ../../agents/vc-pattern-matcher/vc-pattern-matcher.md
+    experience_enabled: true
+    color: 213
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-exit-strategist
+    type: agent
+    role: Exit path quality, acquirer logic, and return timeline realism.
+    tools: []
+    agent_file: ../../agents/vc-exit-strategist/vc-exit-strategist.md
+    experience_enabled: true
+    color: 177
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-thesis-defounder
+    type: agent
+    role: Foundation audit, undefined terms, and circular reasoning detection.
+    tools: []
+    agent_file: ../../agents/vc-thesis-defounder/vc-thesis-defounder.md
+    experience_enabled: true
+    color: 34
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-traction-analyst
+    type: agent
+    role: Retention, cohort health, and revenue-quality analysis.
+    tools: []
+    agent_file: ../../agents/vc-traction-analyst/vc-traction-analyst.md
+    experience_enabled: true
+    color: 51
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-legal-ip-due-diligence
+    type: agent
+    role: Legal, IP, cap-table, and regulatory diligence.
+    tools: []
+    agent_file: ../../agents/vc-legal-ip-due-diligence/vc-legal-ip-due-diligence.md
+    experience_enabled: true
+    color: 199
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-timing-deal-dynamics
+    type: agent
+    role: Timing, round dynamics, valuation anchoring, and access signals.
+    tools: []
+    agent_file: ../../agents/vc-timing-deal-dynamics/vc-timing-deal-dynamics.md
+    experience_enabled: true
+    color: 27
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-value-add-strategist
+    type: agent
+    role: Fund value-add, allocation competitiveness, and portfolio synergies.
+    tools: []
+    agent_file: ../../agents/vc-value-add-strategist/vc-value-add-strategist.md
+    experience_enabled: true
+    color: 82
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: vc-wild-card
+    type: agent
+    role: Provocations, inversions, and creative challenge when consensus hardens too fast.
+    tools: []
+    agent_file: ../../agents/vc-wild-card/vc-wild-card.md
+    experience_enabled: true
+    color: 129
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: web-researcher
+    type: agent
+    role: Source-backed external research: fast fact-checking, dated source verification, and evidence handoffs.
+    tools:
+      - read
+      - research_web
+    agent_file: ../../agents/web-researcher/web-researcher.md
+    experience_enabled: false
+    color: 45
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+levels:
+  - id: deliberation
+    name: Venture Capital Deliberation
+    order: 0
+    stage:
+      type: discussion
+      coordinator: vc-deal-evaluator
+      participants:
+        - vc-market-analyst
+        - vc-contrarian-red-team
+        - vc-founder-assessor
+        - vc-financial-modeler
+        - vc-deal-structurer
+        - vc-technology-evaluator
+        - vc-futurist-thesis-alignment
+        - vc-portfolio-strategist
+        - vc-pattern-matcher
+        - vc-exit-strategist
+        - vc-thesis-defounder
+        - vc-traction-analyst
+        - vc-legal-ip-due-diligence
+        - vc-timing-deal-dynamics
+        - vc-value-add-strategist
+        - vc-wild-card
+        - web-researcher
+      on_agent_failure: skip
+      config:
+        mode: deliberate
+        min_rounds: 1
+        max_rounds: 2
+        min_successful_participants: 3
+        constraints:
+          max_time_minutes: 4
+          max_budget_usd: 18
+        output:
+          path: output
+          format: minutes.md
+          user_review: false
+
+  - id: memo-synthesis
+    name: Investment Memo Synthesis
+    order: 1
+    stage:
+      type: chain
+      sequence:
+        - vc-deal-evaluator
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 6
+          agent_timeout_minutes: 3
+          max_budget_usd: 8
+        output:
+          path: output
+          format: investment-memo.md
+          user_review: false
+
+gates:
+  - from: deliberation
+    to: memo-synthesis
+    condition:
+      type: artifact_exists
+      artifact: output/minutes.md
+
+  - from: memo-synthesis
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: output/investment-memo.md

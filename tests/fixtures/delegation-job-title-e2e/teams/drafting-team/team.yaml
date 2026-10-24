@@ -1,0 +1,60 @@
+team:
+  name: drafting-team
+  description: Chain team that writes the delegated brief up
+  version: '0.1.0'
+
+defaults:
+  provider: openai
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: draft
+  invocation_modes:
+    - team
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+  output_contract:
+    artifacts:
+      - path: draft-result.md
+        required: true
+    completion_artifact: draft-result.md
+
+agents:
+  - name: drafter
+    type: agent
+    role: Writes the delegated brief up
+    tier: execution
+    tools: []
+    agent_file: ../../agents/drafter/drafter.md
+    produces:
+      - path: draft-result.md
+
+levels:
+  - id: draft
+    name: Draft
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - drafter
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 2
+          agent_timeout_minutes: 1
+          max_budget_usd: 1
+        output:
+          format: draft-result.md
+          user_review: false
+
+gates:
+  - from: draft
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: draft-result.md

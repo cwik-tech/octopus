@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "frozenAt": "2026-07-24T16:00:00.000Z",
+  "cases": [
+    {
+      "schemaVersion": 1,
+      "id": "coding-agents",
+      "title": "Coding agents comparison",
+      "scenarioClass": "simple",
+      "brief": "Using current official sources, compare what OpenAI and Anthropic publicly document about their coding-agent products. Produce a concise evidence-traceable report for technical leaders, preserve uncertainty, and publish both Markdown and Word formats. The research is not geographically constrained. Include official product and safety documentation, exclude third-party commentary, and use information current as of today.",
+      "expectedTerms": [
+        "OpenAI",
+        "Anthropic"
+      ],
+      "requiredArtifacts": [
+        "evidence_graph",
+        "section_dossiers",
+        "research_package",
+        "publication_audit",
+        "final_markdown",
+        "final_docx"
+      ],
+      "thresholds": {
+        "minimumRequirementCoverage": 1,
+        "minimumClaimSupport": 0.95,
+        "minimumAuthoritativeSourceRatio": 0.5,
+        "minimumIndependentClaimRatio": 1,
+        "minimumContradictionResolution": 1,
+        "minimumSemanticCoherence": 1,
+        "minimumCitationCorrectness": 1,
+        "minimumArtifactValidity": 1,
+        "minimumAcquisitionYield": 1,
+        "minimumCompositeScore": 0.94,
+        "maximumElapsedMs": 3600000,
+        "maximumCostUsd": 60,
+        "maximumCompositeRegression": 0.02
+      }
+    },
+    {
+      "schemaVersion": 1,
+      "id": "detroit-ice-cream",
+      "title": "Detroit ice cream visitor guide",
+      "scenarioClass": "complex",
+      "brief": "Research current ice-cream destinations in Detroit and in nearby metro communities outside Detroit proper for tourists. Produce an evidence-traceable visitor guide that highlights genuinely distinctive shops, unusual flavors or formats, and practical tourist fit. Use current official shop pages plus independent local or destination coverage. Reconcile dated source conflicts explicitly. Omit any destination whose current operation cannot be verified by the approved evidence standard. Do not create a numbered ranking or claim a single best shop unless observed evidence supports it. Publish both Markdown and Word formats for a general visitor audience, current as of today.",
+      "expectedTerms": [
+        "Detroit",
+        "ice cream"
+      ],
+      "requiredArtifacts": [
+        "evidence_graph",
+        "section_dossiers",
+        "section_drafts",
+        "research_package",
+        "publication_audit",
+        "final_markdown",
+        "final_docx"
+      ],
+      "thresholds": {
+        "minimumRequirementCoverage": 1,
+        "minimumClaimSupport": 0.95,
+        "minimumAuthoritativeSourceRatio": 0.35,
+        "minimumIndependentClaimRatio": 1,
+        "minimumContradictionResolution": 1,
+        "minimumSemanticCoherence": 1,
+        "minimumCitationCorrectness": 1,
+        "minimumArtifactValidity": 1,
+        "minimumAcquisitionYield": 1,
+        "minimumCompositeScore": 0.92,
+        "maximumElapsedMs": 4500000,
+        "maximumCostUsd": 60,
+        "maximumCompositeRegression": 0.02
+      }
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+team:
+  name: resource-architect
+  description: >
+    Design-time Agent that creates standalone Agents or runtime Team
+    compositions from the existing resource library.
+  version: "1.0.0"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: design
+  capabilities:
+    - agent-authoring
+    - team-authoring
+  invocation_modes:
+    - user
+  user_facing: true
+  output_contract:
+    artifacts:
+      - path: resource-outcome.json
+        required: true
+        description: Placeholder artifact; design-time Team is never executed.
+    completion_artifact: resource-outcome.json
+
+agents:
+  - name: resource-architect
+    type: agent
+    role: >
+      Design-time chat Agent that returns one typed resource outcome for
+      discussion, creation, preview, or an explicit edit target.
+    tools: []
+    agent_file: ../../agents/resource-architect/resource-architect.md
+    experience_enabled: false
+    produces:
+      - path: resource-outcome.json
+
+levels:
+  - id: design
+    name: Design
+    order: 0
+    permissions:
+      spawn_teams: false
+    stage:
+      type: routing
+      coordinator: resource-architect
+      config:
+        constraints:
+          max_time_minutes: 5
+          max_budget_usd: 5
+        output:
+          format: resource-outcome.json
+          user_review: false
+
+gates:
+  - from: design
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: resource-outcome.json

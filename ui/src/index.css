@@ -1,0 +1,325 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./styles/vendor/shadcn.css";
+@import "@fontsource-variable/geist";
+@import "streamdown/styles.css";
+
+@source "../node_modules/streamdown/dist/*.js";
+
+@custom-variant dark (&:is(.dark *));
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 1040px;
+  min-height: 700px;
+  overflow: hidden;
+}
+
+/* The main renderer's minimum dimensions do not apply to its loading window. */
+body.startup {
+  min-width: 0;
+  min-height: 0;
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-warning: var(--warning);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-primary-text: var(--primary-text);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-workspace-card: var(--workspace-card);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  /* shadcn's stock radius formula: every step is a fixed offset from the base,
+     so the scale lands on whole pixels (4, 6, 8, 12, 16, 24, 32). */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 16px);
+  --radius-4xl: calc(var(--radius) + 24px);
+}
+
+:root {
+  --background: #f4f6fe;
+  --foreground: #15182a;
+  --card: #ffffff;
+  /* Discussion message and agent cards (WorkspaceSurfaceCard). White like
+     --card here; in dark mode a step darker than the chat canvas. */
+  --workspace-card: #ffffff;
+  /* Recessed fill for cards nested inside a panel. Always a step darker
+     than the surface behind them, in both themes. */
+  --surface-sunken: #e7eaf9;
+  --card-foreground: #15182a;
+  --popover: #ffffff;
+  --popover-foreground: #15182a;
+  --primary: #4f5cd1;
+  --primary-foreground: #ffffff;
+  /* Accent as text or an icon. --primary is a fill color: in dark mode it is
+     too dark to read on the canvas, so text takes this lighter tone. */
+  --primary-text: #4049bd;
+  --secondary: #e7eaf9;
+  --secondary-foreground: #15182a;
+  --muted: #eceefa;
+  --muted-foreground: #5e6483;
+  --accent: #e8eeff;
+  --accent-foreground: #15182a;
+  --destructive: oklch(0.61 0.19 28);
+  --warning: oklch(0.62 0.15 72);
+  --border: #d2d7ef;
+  --input: #c9cfeb;
+  --ring: #4f5cd1;
+  --chart-1: oklch(0.73 0.12 154);
+  --chart-2: oklch(0.65 0.08 132);
+  --chart-3: oklch(0.53 0.06 98);
+  --chart-4: oklch(0.46 0.04 165);
+  --chart-5: oklch(0.33 0.03 144);
+  --radius: 0.5rem;
+  --sidebar: #eceefa;
+  --sidebar-foreground: #15182a;
+  --sidebar-primary: #4f5cd1;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #dce1f7;
+  --sidebar-accent-foreground: #15182a;
+  --sidebar-border: #d2d7ef;
+  --sidebar-ring: #4f5cd1;
+  --desktop-chrome: #e5e9f9;
+  --desktop-chrome-2: #dce1f7;
+  --desktop-shadow: none;
+  --canvas-glow: none;
+  --desktop-scrollbar-thumb: color-mix(
+    in oklab,
+    var(--foreground) 28%,
+    transparent
+  );
+  --desktop-scrollbar-thumb-hover: color-mix(
+    in oklab,
+    var(--foreground) 38%,
+    transparent
+  );
+}
+
+.dark {
+  /* Side panes (--sidebar) sit a step darker than the chat canvas, the same
+     order as light mode. */
+  --background: #1c1928;
+  --foreground: #edeaf6;
+  --card: #242132;
+  --workspace-card: #161320;
+  --surface-sunken: #161320;
+  --card-foreground: #edeaf6;
+  --popover: #2a273b;
+  --popover-foreground: #edeaf6;
+  --primary: #4f5cd1;
+  --primary-foreground: #ffffff;
+  --primary-text: #a2b2fd;
+  --secondary: #2a273b;
+  --secondary-foreground: #edeaf6;
+  --muted: #2a273b;
+  --muted-foreground: #a39dba;
+  --accent: rgba(99, 115, 228, 0.16);
+  --accent-foreground: #edeaf6;
+  --destructive: oklch(0.68 0.18 28);
+  --warning: oklch(0.78 0.15 78);
+  --border: #343047;
+  --input: #3c3851;
+  --ring: #6a7be5;
+  --chart-1: oklch(0.73 0.12 154);
+  --chart-2: oklch(0.65 0.08 132);
+  --chart-3: oklch(0.53 0.06 98);
+  --chart-4: oklch(0.46 0.04 165);
+  --chart-5: oklch(0.33 0.03 144);
+  --sidebar: #100e1a;
+  --sidebar-foreground: #edeaf6;
+  --sidebar-primary: #4f5cd1;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #262136;
+  --sidebar-accent-foreground: #edeaf6;
+  --sidebar-border: #2a2640;
+  --sidebar-ring: #6a7be5;
+  --desktop-chrome: #1a1726;
+  --desktop-chrome-2: #2a273b;
+  --desktop-shadow: none;
+  /* A soft violet light falling from the top of the chat canvas. */
+  --canvas-glow: radial-gradient(
+    ellipse 70% 45% at 50% -8%,
+    rgba(124, 58, 237, 0.16),
+    transparent 70%
+  );
+  --desktop-scrollbar-thumb: color-mix(
+    in oklab,
+    var(--foreground) 28%,
+    transparent
+  );
+  --desktop-scrollbar-thumb-hover: color-mix(
+    in oklab,
+    var(--foreground) 38%,
+    transparent
+  );
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  #root {
+    @apply min-h-screen;
+  }
+  body::selection {
+    background: color-mix(in oklab, var(--primary) 24%, white);
+  }
+}
+
+/*
+ * A rendered markdown table is the answer, not a card around one.
+ *
+ * The markdown renderer wraps every table in its own padded, bordered panel and
+ * then borders the table inside it, so a result table reads as two nested boxes
+ * and loses width to padding it does not need. The outer panel is flattened
+ * here — the table keeps its own frame and gains the full message width. These
+ * rules sit outside `@layer` on purpose: the renderer's classes are Tailwind
+ * utilities, and unlayered rules win over layered ones without `!important`.
+ */
+[data-streamdown="table-wrapper"] {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+/*
+ * A fenced code block is the code, not a frame around it.
+ *
+ * The markdown renderer draws a bordered, padded card and then a second
+ * bordered, padded panel for the code itself, so a long prompt reads as two
+ * nested boxes and wraps early against padding it does not need. Both frames
+ * are flattened here so the code gets the full message width. Same reason as
+ * the table rule above for sitting outside `@layer`.
+ */
+[data-streamdown="code-block"],
+[data-streamdown="code-block-body"] {
+  padding: 0;
+  border: 0;
+}
+
+/*
+ * A long prompt is meant to be read, not scrolled sideways.
+ *
+ * The renderer puts the code in a `pre`, so every line runs off the right edge
+ * and the reader drags a horizontal bar to follow a sentence. Lines wrap here
+ * instead. The line number is a `::before` counter on each line element, so it
+ * still increments once per source line however many visual rows that line
+ * takes; the hanging indent below (a negative first-line indent cancelling a
+ * matching left padding) pulls the number back into the gutter and starts the
+ * wrapped rows under the code rather than under the number. The 2.5rem is the
+ * renderer's own gutter: a 1.5rem number box plus its 1rem margin.
+ */
+[data-streamdown="code-block-body"] pre,
+[data-streamdown="code-block-body"] code {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+[data-streamdown="code-block-body"] code > span {
+  padding-left: 2.5rem;
+  text-indent: -2.5rem;
+}
+
+/* The dark theme's soft violet light at the top of the chat canvas.
+   --canvas-glow is `none` in light mode, so the class is inert there. */
+.canvas-glow {
+  background-image: var(--canvas-glow);
+}
+
+.desktop-titlebar {
+  -webkit-app-region: drag;
+}
+
+.desktop-titlebar button,
+.desktop-titlebar [role="tab"],
+.desktop-window-actions,
+.desktop-toolbar-button {
+  -webkit-app-region: no-drag;
+}
+
+.desktop-shell,
+.desktop-shell * {
+  scrollbar-width: thin;
+  scrollbar-color: var(--desktop-scrollbar-thumb) transparent;
+}
+
+.desktop-shell::-webkit-scrollbar,
+.desktop-shell *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.desktop-shell::-webkit-scrollbar-track,
+.desktop-shell *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.desktop-shell::-webkit-scrollbar-thumb,
+.desktop-shell *::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--desktop-scrollbar-thumb);
+  background-clip: content-box;
+}
+
+.desktop-shell::-webkit-scrollbar-thumb:hover,
+.desktop-shell *::-webkit-scrollbar-thumb:hover {
+  background: var(--desktop-scrollbar-thumb-hover);
+  background-clip: content-box;
+}
+
+.desktop-shell .scrollbar-none,
+.desktop-shell .no-scrollbar {
+  scrollbar-width: none;
+}
+
+.desktop-shell .scrollbar-none::-webkit-scrollbar,
+.desktop-shell .no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

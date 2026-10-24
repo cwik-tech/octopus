@@ -1,0 +1,101 @@
+team:
+  name: "knowledge-systems-crew"
+  description: >
+    Execute knowledge base and RAG projects end-to-end: scope requirements,
+    evaluate parsing and extraction fidelity, design and validate retrieval
+    quality, compare tooling and frameworks, and own the operational
+    knowledge-product model post-launch.
+  version: "0.1.0"
+  created_by_orchestrator: "70c57b31-d8eb-44a4-b076-6c534a2ef664"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: setup
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: "incoming-brief.md"
+        required: true
+        description: Runtime brief for the generated team.
+  output_contract:
+    artifacts:
+      - path: "final-result.md"
+        required: true
+        description: Final result produced by the generated team.
+    completion_artifact: "final-result.md"
+
+agents:
+  - name: "knowledge-product-architect"
+    type: agent
+    role: >
+      Orchestration lead
+    tools: []
+    agent_file: "../../agents/knowledge-product-architect/knowledge-product-architect.md"
+    experience_enabled: true
+    produces:
+      - path: "final-result.md"
+
+  - name: "document-extraction-specialist"
+    type: agent
+    role: >
+      Parsing pipeline lead
+    tools: []
+    agent_file: "../../agents/document-extraction-specialist/document-extraction-specialist.md"
+    experience_enabled: true
+
+  - name: "retrieval-architect"
+    type: agent
+    role: >
+      Retrieval evaluation and validation lead
+    tools: []
+    agent_file: "../../agents/retrieval-architect/retrieval-architect.md"
+    experience_enabled: true
+
+  - name: "tooling-evaluator"
+    type: agent
+    role: >
+      Framework and technology selection lead
+    tools: []
+    agent_file: "../../agents/tooling-evaluator/tooling-evaluator.md"
+    experience_enabled: true
+
+  - name: "knowledge-governance-architect"
+    type: agent
+    role: >
+      Operational data-product owner
+    tools: []
+    agent_file: "../../agents/knowledge-governance-architect/knowledge-governance-architect.md"
+    experience_enabled: true
+levels:
+  - id: setup
+    name: Setup
+    order: 0
+    stage:
+      type: discussion
+      coordinator: knowledge-product-architect
+      participants:
+        - "document-extraction-specialist"
+        - "retrieval-architect"
+        - "tooling-evaluator"
+        - "knowledge-governance-architect"
+      on_agent_failure: skip
+      config:
+        mode: deliberate
+        min_rounds: 1
+        max_rounds: 3
+        min_successful_participants: 3
+        output:
+          format: "final-result.md"
+          user_review: false
+gates:
+  - from: setup
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: "final-result.md"

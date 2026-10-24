@@ -1,0 +1,222 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Problem Thinking Board
+#
+# Specialist subteam for multi-perspective pressure-testing and decomposition.
+# Invoked by higher-level routing teams when a request needs deeper structured
+# analysis rather than a direct answer.
+# ─────────────────────────────────────────────────────────────────────────────
+
+team:
+  name: problem-thinking-board
+  description: >
+    Specialist consulting board that pressure-tests a client problem from
+    multiple angles before committing to a decomposition.
+  version: '0.1.0'
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: deliberation
+  capabilities:
+    - strategy
+    - decomposition
+    - board
+    - analysis
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+        description: Intake brief or delegated assignment for structured analysis.
+  output_contract:
+    artifacts:
+      - path: output/decomposition-plan.md
+        required: true
+        description: Final structured decomposition or analysis returned by the board.
+    completion_artifact: output/decomposition-plan.md
+
+agents:
+  - name: problem-decomposer
+    type: agent
+    role: >
+      Classifies the problem, manages the board deliberation, and synthesizes
+      the final decomposition plan.
+    tools:
+      - set_roster
+      - create_brief
+      - converse
+    agent_file: ../../agents/problem-decomposer/problem-decomposer.md
+    experience_enabled: true
+    color: 208
+    produces:
+      - path: output/decomposition-plan.md
+
+  - name: contrarian
+    type: agent
+    role: Challenges the problem framing and pressure-tests assumptions.
+    tools: []
+    agent_file: ../../agents/contrarian/contrarian.md
+    experience_enabled: true
+    color: 196
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: pragmatist
+    type: agent
+    role: Tests feasibility and resource realism.
+    tools: []
+    agent_file: ../../agents/pragmatist/pragmatist.md
+    experience_enabled: true
+    color: 34
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: domain-researcher
+    type: agent
+    role: Rapid domain acquisition and hidden-constraint mapping.
+    tools:
+      - read
+      - bash
+    agent_file: ../../agents/domain-researcher/domain-researcher.md
+    experience_enabled: true
+    color: 39
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: web-researcher
+    type: agent
+    role: Source-backed external research: fast fact-checking, dated source verification, and evidence handoffs.
+    tools:
+      - read
+      - research_web
+    agent_file: ../../agents/web-researcher/web-researcher.md
+    experience_enabled: false
+    color: 45
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: client-lens
+    type: agent
+    role: Reads stakeholder politics, adoption risk, and organizational dynamics.
+    tools: []
+    agent_file: ../../agents/client-lens/client-lens.md
+    experience_enabled: true
+    color: 177
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: money-maker
+    type: agent
+    role: Evaluates commercial viability, pricing, and scope structure.
+    tools: []
+    agent_file: ../../agents/money-maker/money-maker.md
+    experience_enabled: true
+    color: 220
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: innovator
+    type: agent
+    role: Expands the option set with novel solution directions.
+    tools: []
+    agent_file: ../../agents/innovator/innovator.md
+    experience_enabled: true
+    color: 118
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: futurist
+    type: agent
+    role: Tests the decomposition against multiple future scenarios.
+    tools: []
+    agent_file: ../../agents/futurist/futurist.md
+    experience_enabled: true
+    color: 141
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: moonshot
+    type: agent
+    role: Proposes category-level reframes when the current game is unwinnable.
+    tools: []
+    agent_file: ../../agents/moonshot/moonshot.md
+    experience_enabled: true
+
+  - name: crazy-man
+    type: agent
+    role: Generates absurd associations that can unlock unconventional paths.
+    tools: []
+    agent_file: ../../agents/crazy-man/crazy-man.md
+    experience_enabled: true
+
+  - name: first-principles-fool
+    type: agent
+    role: Forces justification of foundational assumptions.
+    tools: []
+    agent_file: ../../agents/first-principles-fool/first-principles-fool.md
+    experience_enabled: true
+
+  - name: pattern-matcher
+    type: agent
+    role: Finds structural analogies from unrelated domains.
+    tools: []
+    agent_file: ../../agents/pattern-matcher/pattern-matcher.md
+    experience_enabled: true
+    color: 213
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+levels:
+  - id: deliberation
+    name: Board Deliberation
+    order: 0
+    stage:
+      type: discussion
+      coordinator: problem-decomposer
+      participants:
+        - contrarian
+        - pragmatist
+        - domain-researcher
+        - web-researcher
+        - client-lens
+        - money-maker
+        - innovator
+        - futurist
+        - moonshot
+        - crazy-man
+        - first-principles-fool
+        - pattern-matcher
+      on_agent_failure: skip
+      config:
+        mode: deliberate
+        min_rounds: 1
+        max_rounds: 3
+        min_successful_participants: 2
+        constraints:
+          max_time_minutes: 2
+          max_budget_usd: 10
+        output:
+          path: output
+          format: decomposition-plan.md
+          user_review: false
+
+gates:
+  - from: deliberation
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: output/decomposition-plan.md

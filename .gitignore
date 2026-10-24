@@ -1,0 +1,53 @@
+.tests-dist/
+dist-electron/
+release/
+playwright-report/
+test-results/
+node_modules/
+file-parser/node_modules/
+file-parser/dist/
+ui/dist/
+input-files/parsed/
+workspace/
+youtube-settings.json
+
+# User drop-in files
+input-files/*
+!input-files/.gitkeep
+
+# One-off UX audit artifacts
+ux-audit/
+# Temporary verification screenshots belong outside the repository.
+/docs/evidence/**/*.png
+.DS_Store
+**/.DS_Store
+
+# Agent team task logs
+.pi-tasks/
+.pi
+.pi-worktree.json
+.claude/
+.qwen/
+.create-orchestrator/
+agents/agent-*/
+
+.env
+.env.local
+.playwright-cli
+.ds-sync/
+ds-bundle/
+.design-sync/
+ui/.design-sync-entry.tsx
+
+# Vendored YouTube tool binaries — staged by scripts/stage-youtube-tools.ts
+build/youtube-tools/darwin-*/
+build/office-tools/darwin-*/
+
+# Generated curated bundle — staged by scripts/stage-builtin-resources.ts.
+build/curated-resources/
+
+# Generated code map can embed local paths and source snapshots.
+/docs/code-map/code-map.html
+
+# Runtime Resource Library projections written by the app (domains/resource-library/runtime-projection.ts)
+agents/.resource-library-tasks/

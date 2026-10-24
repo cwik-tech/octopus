@@ -1,0 +1,59 @@
+team:
+  name: notes-desk
+  description: One-step chain whose completed level leaves a run to write up
+  version: '0.1.0'
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: note
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+  output_contract:
+    artifacts:
+      - path: note-result.md
+        required: true
+    completion_artifact: note-result.md
+
+agents:
+  - name: note-taker
+    type: agent
+    role: Answers the brief in one short note
+    tier: execution
+    tools: []
+    agent_file: ../../agents/note-taker/note-taker.md
+    produces:
+      - path: note-result.md
+
+levels:
+  - id: note
+    name: Note
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - note-taker
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 2
+          agent_timeout_minutes: 1
+          max_budget_usd: 1
+        output:
+          format: note-result.md
+          user_review: false
+
+gates:
+  - from: note
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: note-result.md

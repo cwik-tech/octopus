@@ -1,0 +1,12 @@
+dedication-chain:
+  type: team
+  description: A writer and editor complete a short dedication
+  team_path: ./teams/dedication-chain
+  input_artifact: incoming-brief.md
+  output_artifact: dedication.md
+dedication-discussion:
+  type: team
+  description: An interviewer obtains the brief, a poet writes, and the lead completes the discussion
+  team_path: ./teams/dedication-discussion
+  input_artifact: incoming-brief.md
+  output_artifact: dedication.md

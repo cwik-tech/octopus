@@ -1,0 +1,3 @@
+packaged-smoke:
+  description: Real two-step workflow used by the packaged Electron smoke test
+  template_path: ./templates/packaged-smoke.yaml

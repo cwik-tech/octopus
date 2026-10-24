@@ -1,0 +1,3 @@
+barrier-pipeline-flow:
+  description: Fixture workflow that runs one bounded-parallel pipeline team step
+  template_path: ./templates/barrier-pipeline.yaml

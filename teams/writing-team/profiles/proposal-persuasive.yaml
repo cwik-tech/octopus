@@ -1,0 +1,72 @@
+name: proposal-persuasive
+description: >
+  For client proposals, pitches, and business development documents.
+  Builds momentum toward a clear recommendation. Confident and compelling.
+
+# Tone and register
+tone: persuasive
+formality: medium-high
+hedging: minimal
+
+# Sentence and vocabulary
+sentence_length: varied              # Short sentences for punch. Medium for development. Vary deliberately.
+vocabulary: confident-professional   # Aspirational but grounded. No unsubstantiated superlatives.
+voice: active                        # Active throughout. Never passive in key arguments.
+person: mixed                        # "We" for the consulting team. "You" for the client. "The company" for analysis.
+
+# Structure preferences
+structure_preference: problem-solution-benefit   # State the problem, offer the solution, quantify the benefit
+executive_summary: required                      # Must be compelling enough to secure a follow-up conversation
+max_options_presented: 3                         # Max 3 — too many options signals lack of conviction
+
+# Hedging rules
+permitted_hedges:
+  - "our analysis indicates"
+  - "based on comparable engagements"   # With specifics
+forbidden_hedges:
+  - "it might be possible"
+  - "perhaps"
+  - "we think it could"
+  - "potentially"                        # Avoid unless quantifying genuine uncertainty
+  - "subject to further analysis"        # Don't hedge the proposal itself
+
+# Persuasion conventions
+lead_with_problem: true              # Always open by naming the client's problem specifically
+quantify_outcomes: required          # Every proposed benefit must have a number or it doesn't count
+social_proof: encouraged             # Reference comparable engagements (anonymised if needed)
+risk_acknowledgment: brief           # Acknowledge risks briefly — ignoring them reduces credibility
+urgency: contextual                  # Create urgency only when genuine — false urgency destroys trust
+
+# Person rules
+person_notes: >
+  "We" = the consulting team, our capabilities, our approach.
+  "You" / "Your" = the client, their challenges, their outcomes.
+  Avoid overusing "I" — this is a firm engagement, not a personal one.
+  Mix to create a collaborative feel: "We've seen this challenge before.
+  Your situation has a specific wrinkle..."
+
+# Length guidance
+target_length_pages:
+  proposal_short: "5-8"
+  proposal_full: "10-15"
+  pitch_deck_support: "3-5"
+
+# Banned in proposals
+banned_additional:
+  - "we would be delighted to"        # Sycophantic
+  - "we are pleased to present"       # Filler opening
+  - "herewith"                        # Archaic
+  - "please find enclosed"            # Archaic
+  - "as per our conversation"         # Awkward — say "following our discussion"
+
+# Examples of the right register
+calibration_example: >
+  The mid-market window is closing faster than most companies in this space
+  realise. Customer acquisition costs are up 40%, deal cycles have nearly
+  doubled, and three new entrants are systematically undercutting on price.
+  The companies that navigate this transition successfully share one thing:
+  they moved upmarket before the margin pressure became existential, not
+  after. Your pipeline data tells us you're at that inflection point now.
+  We've helped four companies in comparable positions make this shift
+  without sacrificing short-term revenue. Here's what that looks like
+  for you.

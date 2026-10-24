@@ -1,0 +1,66 @@
+team:
+  name: packaged-smoke-team
+  description: Coordinator-free deterministic chain for packaged runtime validation
+  version: '0.1.0'
+
+defaults:
+  provider: openai
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: write
+  invocation_modes:
+    - team
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+  output_contract:
+    artifacts:
+      - path: final.md
+        required: true
+    completion_artifact: final.md
+
+models:
+  execution:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: openai
+
+agents:
+  - name: packaged-smoke-worker
+    type: agent
+    role: Return the deterministic external-provider response as the final result
+    tier: execution
+    tools: []
+    agent_file: ../../agents/packaged-smoke-worker/packaged-smoke-worker.md
+    produces:
+      - path: final.md
+
+levels:
+  - id: write
+    name: Write
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - packaged-smoke-worker
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 1
+          agent_timeout_minutes: 1
+          max_budget_usd: 1
+        output:
+          format: final.md
+          user_review: false
+
+gates:
+  - from: write
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: final.md

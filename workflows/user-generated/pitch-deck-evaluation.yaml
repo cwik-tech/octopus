@@ -1,0 +1,62 @@
+workflow:
+  id: pitch-deck-evaluation
+  description: >
+    Evaluate an uploaded or described startup pitch deck through a
+    venture-capital investment committee discussion, then hand the result to
+    the writing team for an investment memo covering market, team, traction,
+    technology, financials, risks, deal structure, and exit potential.
+  matches:
+    - pitch_deck_evaluation
+    - startup_diligence
+    - vc_investment_memo
+    - deal_screening
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: evaluate-deck
+      type: team
+      team: venture-capital-team
+      input_artifact: incoming-brief.md
+      result_artifact: output/investment-memo.md
+      requested_result_type: 'artifact:output/investment-memo.md'
+      brief_prefix: 'Evaluate the pitch deck as a venture-capital deal screen. Focus on investment attractiveness, diligence risks, missing information, and whether the company merits deeper diligence.'
+      include_initial_brief: true
+      runtime_overrides:
+        levels:
+          deliberation:
+            discussion:
+              participants:
+                - vc-market-analyst
+                - vc-founder-assessor
+                - vc-traction-analyst
+                - vc-financial-modeler
+                - vc-technology-evaluator
+                - vc-contrarian-red-team
+                - vc-deal-structurer
+                - vc-exit-strategist
+                - web-researcher
+              min_rounds: 1
+              max_rounds: 2
+              min_successful_participants: 3
+    - id: write-investment-memo
+      type: team
+      team: writing-team
+      input_artifact: incoming-brief.md
+      result_artifact: final-draft.md
+      requested_result_type: 'artifact:final-draft.md'
+      brief_prefix: 'Use the venture-investment-memo template to convert the committee discussion into a concise VC investment memo with recommendation, key positives, key risks, diligence questions, and next-step decision.'
+      include_initial_brief: true
+      runtime_overrides:
+        levels:
+          editorial-review:
+            review:
+              max_iterations: 1
+      handoff:
+        from_step: evaluate-deck
+        from_artifact: output/investment-memo.md
+        to_artifact: incoming-brief.md
+  output:
+    from_step: write-investment-memo
+    artifact: final-draft.md
+  on_blocked: stop
+  on_failed: stop

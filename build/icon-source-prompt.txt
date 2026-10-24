@@ -1,0 +1,5 @@
+Created with the built-in image generation tool, editing public/icon.png.
+
+Edit this existing app icon: preserve the exact violet octopus artwork, expression, colors, proportions and all tentacles. Change only the transparent backdrop to a flat solid very light warm white (#FAFAF8), covering the entire square canvas edge to edge. Keep the octopus centered, with approximately 12 percent clear white margin on each side to fit within a macOS icon mask. No gray gradient, no shadows, no border, no rounded rectangle drawn inside the image, no text. Square 1024x1024 app icon source.
+
+The generated source is icon-source.png. Build icon.icns by resizing it into the standard macOS iconset sizes with sips, then converting the iconset with iconutil. public/icon.png remains the transparent artwork for the running Dock icon.

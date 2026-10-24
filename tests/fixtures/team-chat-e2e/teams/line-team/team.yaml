@@ -1,0 +1,75 @@
+team:
+  name: line-team
+  description: Coordinator-free chain that runs its whole bench in order
+  version: '0.1.0'
+
+defaults:
+  provider: openai
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: run
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+  output_contract:
+    artifacts:
+      - path: line-result.md
+        required: true
+    completion_artifact: line-result.md
+
+models:
+  execution:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: openai
+
+agents:
+  - name: line-one
+    type: agent
+    role: First chain step
+    tier: execution
+    tools: []
+    agent_file: ../../agents/line-one/line-one.md
+  - name: line-two
+    type: agent
+    role: Second chain step
+    tier: execution
+    tools: []
+    agent_file: ../../agents/line-two/line-two.md
+    produces:
+      - path: line-result.md
+
+levels:
+  - id: run
+    name: Run
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - line-one
+        - line-two
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 2
+          agent_timeout_minutes: 1
+          max_budget_usd: 1
+        output:
+          format: line-result.md
+          user_review: false
+
+gates:
+  - from: run
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: line-result.md

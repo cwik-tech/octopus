@@ -1,0 +1,31 @@
+catalog:
+  dataset: "<dataset-id>"
+  version: "0.1.0"
+  owner: "<owner>"
+  rules:
+    - id: "<rule-id>"
+      status: "proposed"
+      expectation: "<business-expectation>"
+      consumer_impact: "<impact>"
+      dimension: "<completeness-validity-accuracy-proxy-uniqueness-consistency-timeliness-referential-integrity>"
+      population: "<records-and-window>"
+      calculation: "<executable-predicate-or-query>"
+      exclusions:
+        - "<declared-exclusion>"
+      thresholds:
+        warning: "<threshold>"
+        failure: "<threshold>"
+      severity: "<severity>"
+      action: "<observe-alert-quarantine-or-block>"
+      evidence_retained: "<evidence>"
+      remediation: "<repair-or-response>"
+      owners:
+        rule: "<owner>"
+        data: "<owner>"
+        response: "<owner>"
+      escalation_route: "<route>"
+      response_time: "<target>"
+      links:
+        contract: "<path-or-id>"
+        lineage: "<path-or-id>"
+        runbook: "<path-or-id>"

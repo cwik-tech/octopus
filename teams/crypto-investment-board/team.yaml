@@ -1,0 +1,168 @@
+team:
+  name: "crypto-investment-board"
+  description: >
+    Investment-committee-style board for cryptocurrency investing across two
+    styles: long-term thesis positions in established assets (BTC, ETH, majors)
+    and a risk-budgeted speculative sleeve of early-stage tokens, DeFi, and
+    narrative plays. The lead frames each question as an investment decision,
+    convenes specialists, forces bull/bear tension, and produces a decision
+    record with thesis, risks, and invalidation triggers. A discovery scout
+    surfaces early-stage candidates from forums and social channels, which must
+    pass diligence, risk, contrarian, and dated-fact verification before the
+    portfolio strategist sizes them. Learning is a side benefit delivered
+    through a shared plain-language explainer skill.
+  version: "0.1.0"
+  created_by_orchestrator: "4f770a01-9874-41bd-b868-63d8004c900f"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: deliberation
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: "incoming-brief.md"
+        required: true
+        description: Runtime brief for the generated team.
+  output_contract:
+    artifacts:
+      - path: "board-deliberation.md"
+        required: true
+        description: Full specialist discussion used as the lead's synthesis input.
+      - path: "final-result.md"
+        required: true
+        description: Lead-owned crypto investment decision record.
+    completion_artifact: "final-result.md"
+
+agents:
+  - name: "contrarian"
+    type: agent
+    role: >
+      Bear-case and assumption challenger
+    tools: []
+    agent_file: "../../agents/contrarian/contrarian.md"
+    experience_enabled: true
+
+  - name: "web-researcher"
+    type: agent
+    role: >
+      Dated, source-backed fact verifier
+    tools:
+      - read
+      - research_web
+    agent_file: "../../agents/web-researcher/web-researcher.md"
+    experience_enabled: true
+
+  - name: "crypto-investment-lead"
+    type: agent
+    role: >
+      Orchestration lead and investment decision-record owner
+    tools: []
+    agent_file: "../../agents/crypto-investment-lead/crypto-investment-lead.md"
+    experience_enabled: true
+    produces:
+      - path: "board-deliberation.md"
+      - path: "final-result.md"
+
+  - name: "crypto-market-analyst"
+    type: agent
+    role: >
+      Market-regime, liquidity, and timing analyst
+    tools: []
+    agent_file: "../../agents/crypto-market-analyst/crypto-market-analyst.md"
+    experience_enabled: true
+
+  - name: "crypto-portfolio-strategist"
+    type: agent
+    role: >
+      Allocation, position-sizing, and risk-budget strategist
+    tools: []
+    agent_file: "../../agents/crypto-portfolio-strategist/crypto-portfolio-strategist.md"
+    experience_enabled: true
+
+  - name: "crypto-token-diligence-analyst"
+    type: agent
+    role: >
+      Asset and protocol due-diligence specialist
+    tools: []
+    agent_file: "../../agents/crypto-token-diligence-analyst/crypto-token-diligence-analyst.md"
+    experience_enabled: true
+
+  - name: "crypto-risk-compliance-analyst"
+    type: agent
+    role: >
+      Counterparty, regulatory, tax, and security-risk specialist
+    tools: []
+    agent_file: "../../agents/crypto-risk-compliance-analyst/crypto-risk-compliance-analyst.md"
+    experience_enabled: true
+
+  - name: "crypto-early-signal-scout"
+    type: agent
+    role: >
+      Early-stage token discovery and social-signal scout
+    tools:
+      - read
+      - research_web
+    agent_file: "../../agents/crypto-early-signal-scout/crypto-early-signal-scout.md"
+    experience_enabled: true
+levels:
+  - id: deliberation
+    name: Crypto Investment Deliberation
+    order: 0
+    stage:
+      type: discussion
+      coordinator: "crypto-investment-lead"
+      participants:
+        - "crypto-early-signal-scout"
+        - "crypto-token-diligence-analyst"
+        - "crypto-risk-compliance-analyst"
+        - "contrarian"
+        - "web-researcher"
+        - "crypto-market-analyst"
+        - "crypto-portfolio-strategist"
+      on_agent_failure: skip
+      config:
+        mode: deliberate
+        min_rounds: 1
+        max_rounds: 3
+        min_successful_participants: 3
+        constraints:
+          max_time_minutes: 6
+          max_budget_usd: 20
+        output:
+          format: "board-deliberation.md"
+          user_review: false
+
+  - id: decision-synthesis
+    name: Investment Decision Synthesis
+    order: 1
+    stage:
+      type: chain
+      sequence:
+        - "crypto-investment-lead"
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 6
+          agent_timeout_minutes: 3
+          max_budget_usd: 8
+        output:
+          format: "final-result.md"
+          user_review: false
+gates:
+  - from: deliberation
+    to: decision-synthesis
+    condition:
+      type: artifact_exists
+      artifact: "board-deliberation.md"
+
+  - from: decision-synthesis
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: "final-result.md"

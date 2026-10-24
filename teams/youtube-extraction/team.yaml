@@ -1,0 +1,98 @@
+team:
+  name: youtube-extraction
+  description: Capture YouTube transcripts, extract source-linked methodologies, and generate screenshot-rich manuals.
+  version: "1.0.0"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: extract
+  capabilities:
+    - youtube-transcripts
+    - playlist-extraction
+    - channel-extraction
+    - methodology-extraction
+    - manual-generation
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+        description: YouTube URL, extraction scope, language preferences, requested document formats and purpose, and optional methodology request.
+  output_contract:
+    artifacts:
+      - path: extraction-report.md
+        required: true
+        description: Capture summary and links to transcript or methodology artifacts.
+      - path: output/youtube-manifest.json
+        required: false
+        description: Resumable item-level transcript capture manifest.
+      - path: output/transcripts/
+        required: false
+        description: Per-video captured transcripts in Markdown (human-readable, timestamped) and JSON (machine-readable).
+      - path: output/methods/
+        required: false
+        description: Per-video source-linked methodology extractions produced when the user requests a methodology.
+      - path: output/generalized-methodology/
+        required: false
+        description: Consolidated cross-video methodology playbook produced when multiple videos are available.
+      - path: output/manuals/
+        required: false
+        description: Per-video bundles containing metadata, plans, reviewed screenshots, only the requested documents, and a portable ZIP for Markdown.
+    completion_artifact: extraction-report.md
+
+agents:
+  - name: youtube-extractor
+    type: agent
+    role: Captures complete transcripts and performs explicitly requested methodology or manual generation.
+    tools:
+      - read
+      - browser
+      - youtube_extract
+    agent_file: ../../agents/youtube-extractor/youtube-extractor.md
+    experience_enabled: false
+    color: 196
+    produces:
+      - path: extraction-report.md
+      - path: output/youtube-manifest.json
+      - path: output/transcripts/
+      - path: output/methods/
+      - path: output/generalized-methodology/
+      - path: output/manuals/
+
+composition:
+  team_registry: ../../teams.yaml
+  spawn_limits:
+    max_depth: 1
+    max_concurrent: 1
+    max_total_budget_usd: 20
+
+levels:
+  - id: extract
+    name: Extract YouTube Content
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - youtube-extractor
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 60
+          agent_timeout_minutes: 55
+          max_budget_usd: 20
+        output:
+          format: extraction-report.md
+          user_review: false
+
+gates:
+  - from: extract
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: extraction-report.md

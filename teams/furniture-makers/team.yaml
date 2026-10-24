@@ -1,0 +1,105 @@
+team:
+  name: "furniture-makers"
+  description: >
+    A practical woodworking and furniture-production team for intermediate
+    hobbyists, covering project design, joinery, shop-aware material and tool
+    decisions, finishing, troubleshooting, and optional small-batch selling.
+  version: "0.1.0"
+  created_by_orchestrator: "84bf9799-f7df-4e8b-8238-2f5725f6d69b"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: setup
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: "incoming-brief.md"
+        required: true
+        description: Runtime brief for the generated team.
+  output_contract:
+    artifacts:
+      - path: "final-result.md"
+        required: true
+        description: Final result produced by the generated team.
+    completion_artifact: "final-result.md"
+
+agents:
+  - name: "furniture-making-lead"
+    type: agent
+    role: >
+      orchestration
+    tools: []
+    agent_file: "../../agents/furniture-making-lead/furniture-making-lead.md"
+    experience_enabled: true
+
+  - name: "furniture-designer"
+    type: agent
+    role: >
+      Furniture design and planning specialist
+    tools: []
+    agent_file: "../../agents/furniture-designer/furniture-designer.md"
+    experience_enabled: true
+
+  - name: "joinery-build-specialist"
+    type: agent
+    role: >
+      Joinery and construction specialist
+    tools: []
+    agent_file: "../../agents/joinery-build-specialist/joinery-build-specialist.md"
+    experience_enabled: true
+
+  - name: "shop-tools-materials-specialist"
+    type: agent
+    role: >
+      Shop methods, tools, and materials specialist
+    tools: []
+    agent_file: "../../agents/shop-tools-materials-specialist/shop-tools-materials-specialist.md"
+    experience_enabled: true
+
+  - name: "furniture-production-advisor"
+    type: agent
+    role: >
+      Small-batch furniture production advisor
+    tools: []
+    agent_file: "../../agents/furniture-production-advisor/furniture-production-advisor.md"
+    experience_enabled: true
+
+  - name: "finish-repair-specialist"
+    type: agent
+    role: >
+      Finishing, repair, and restoration specialist
+    tools: []
+    agent_file: "../../agents/finish-repair-specialist/finish-repair-specialist.md"
+    experience_enabled: true
+    produces:
+      - path: "final-result.md"
+levels:
+  - id: setup
+    name: Setup
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - "furniture-making-lead"
+        - "furniture-designer"
+        - "joinery-build-specialist"
+        - "shop-tools-materials-specialist"
+        - "furniture-production-advisor"
+        - "finish-repair-specialist"
+      config:
+        handoff_format: markdown
+        output:
+          format: "final-result.md"
+          user_review: false
+gates:
+  - from: setup
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: "final-result.md"

@@ -1,0 +1,164 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # The offline suite with the durable execution journal explicitly disabled.
+  # Pinned rather than left to the default: since A-14 the default is
+  # `authoritative`, so an unpinned run would prove that mode twice and leave
+  # `disabled` — still a supported configuration — untested anywhere.
+  #
+  # This is also the only job that typechecks, builds Electron and runs
+  # arch:check, and the only one `desktop-package-smoke` can gate on. Retiring
+  # it drops three gates that have nothing to do with the journal mode.
+  #
+  # 45 minutes is a measuring timeout, not a target. At 15 the job was cancelled
+  # mid-suite on every run since it was added, so the suite's real duration has
+  # never been observed; the `[run-tests]` line now reports the runner's core
+  # count and the chosen concurrency. Tighten this once one run completes.
+  core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm --prefix file-parser ci
+      - name: Check application version policy
+        # A new public repository has no previous branch tip to compare with.
+        # Every build/test gate still runs on its initial push.
+        if: >-
+          github.event_name == 'pull_request' ||
+          (github.ref == 'refs/heads/main' && github.event.created != true)
+        env:
+          VERSION_POLICY_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: npm run version:check -- --base "$VERSION_POLICY_BASE"
+      - run: npx tsc --noEmit
+      - run: npm run electron:build
+      - run: npm run arch:check
+      - run: PIPELINE_DURABLE_JOURNAL=disabled npm run test:core
+
+  # The same offline suite with the durable execution journal explicitly
+  # authoritative. Two jobs, two modes, each with its own pass/fail signal —
+  # rather than one job proving whichever mode the default happens to be, and
+  # nothing proving the other.
+  #
+  # Typecheck, arch:check and the Electron build are omitted deliberately: none
+  # of them read PIPELINE_DURABLE_JOURNAL, so repeating them here would only
+  # duplicate `core`'s signal.
+  #
+  # Same 45-minute measuring timeout as `core`, for the same reason. This job
+  # has only ever appeared to fit inside 15 minutes because the runner exits on
+  # the first failing phase: the parallel pool failed at 13m20s and the ~81
+  # isolated files after it were never reached, so its full duration is as
+  # unmeasured as `core`'s.
+  core-journal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm --prefix file-parser ci
+      - run: npm run test:core:journal
+
+  ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: ui
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - name: Install shared root dependencies
+        run: npm ci --ignore-scripts
+        working-directory: .
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run check
+
+  file-parser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: file-parser
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: file-parser/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm test
+
+  file-parser-native:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-14, windows-latest]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: file-parser/package-lock.json
+      - run: npm --prefix file-parser ci
+      - run: npm --prefix file-parser run native:smoke
+
+  security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: node scripts/audit-security.mjs
+
+  desktop-package-smoke:
+    needs: [core, ui, file-parser, file-parser-native]
+    runs-on: macos-14
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm --prefix ui ci
+      - run: npm --prefix file-parser ci
+      # One real visible-window run on a genuine macOS runner. Every other
+      # desktop suite is deliberately hidden so routine verification does not
+      # steal focus, which left the visible branch of the smoke's
+      # BrowserWindow.isVisible assertion never exercised.
+      - run: npm run desktop:e2e:visible
+      - run: npm run desktop:e2e:packaged

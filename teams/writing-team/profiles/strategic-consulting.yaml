@@ -1,0 +1,70 @@
+name: strategic-consulting
+description: >
+  For strategy memos, board syntheses, executive one-pagers, and recommendation
+  documents that should read like a professional business consultant rather than
+  a narrator or commentator. Prioritize judgment, implication, and decision-useful framing.
+
+# Tone and register
+tone: strategic
+formality: high
+hedging: low
+
+# Sentence and vocabulary
+sentence_length: short-to-medium      # 10-18 words average
+vocabulary: precise-business          # Specific, plain business language; no buzzword stacking
+voice: active                         # State implications directly
+person: third                         # "The company", "management", "the board", not "we"
+
+# Structure preferences
+structure_preference: lead-with-implication   # Start with the conclusion and what it means
+executive_summary: required
+max_options_presented: 3
+
+# Hedging rules
+permitted_hedges:
+  - "the evidence indicates"
+  - "the pattern suggests"
+  - "on balance"
+  - "the implication is"
+forbidden_hedges:
+  - "it seems"
+  - "looks like"
+  - "straightforward"
+  - "the story is"
+  - "the reality is"
+  - "boring"
+  - "hot"
+  - "dead"
+
+# Register conventions
+register_rules:
+  - Lead with the answer, not with scene-setting.
+  - Prefer "the implication", "the constraint", "the trade-off", and "the priority" over narrative flourish.
+  - Write like an advisor synthesizing evidence for a decision-maker, not like a journalist recapping a debate.
+  - Avoid chatty framing, rhetorical flourish, and casual labels.
+  - Avoid conversational intensifiers, rhetorical setup, and colorful labels unless they are quoted from the source and materially important.
+  - Turn observations into business meaning: what changed, why it matters, and what follows.
+
+# Banned additional phrases
+banned_additional:
+  - "the board's conclusion is straightforward"
+  - "this is a story of"
+  - "looks much more attractive"
+  - "boring, necessity-based"
+  - "headline narrative"
+  - "loudest growth sectors"
+
+# Length guidance
+target_length_pages:
+  recommendation: "1-3"
+  assessment: "3-6"
+  executive-summary: "1-2"
+
+# Calibration
+calibration_example: >
+  The central conclusion is not that data centers, logistics, and multifamily will all grow.
+  It is that broad sector labels are no longer the right decision frame. Returns will depend
+  less on where demand appears and more on where demand can convert into durable NOI before
+  infrastructure constraints, supply responses, or capital crowding compress the advantage.
+  The implication for investors and operators is clear: asset selection must become more local,
+  more operational, and more constraint-aware.

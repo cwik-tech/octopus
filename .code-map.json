@@ -1,0 +1,4 @@
+{
+  "descriptions": "docs/code-map/descriptions.json",
+  "out": "docs/code-map/code-map.html"
+}

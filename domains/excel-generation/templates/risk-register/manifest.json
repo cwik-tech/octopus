@@ -1,0 +1,30 @@
+{
+  "id": "risk-register",
+  "displayName": "Risk Register",
+  "description": "Weekly risk assessment workbook: a Risks register feeding a formula-driven Risk summary matrix (likelihood x severity and per-category counts). Supply only the risk rows; numbering and all summary statistics are computed by the template.",
+  "templateFile": "template.xlsx",
+  "inputs": {
+    "tables": {
+      "risks": {
+        "description": "Risk register rows. Starts at Risks!B2 so the prefilled '#' numbering formulas in column A stay intact. Use the exact list values noted per column; the Risk summary sheet counts them with COUNTIFS.",
+        "sheet": "Risks",
+        "startCell": "B2",
+        "maxRows": 83,
+        "columns": [
+          { "key": "risk", "type": "string", "description": "Short risk statement." },
+          { "key": "category", "type": "string", "description": "One of: Business, Internal, Market, Operations, Regulatory, Security, Technology." },
+          { "key": "likelihood", "type": "string", "description": "One of: Low, Med, High." },
+          { "key": "severity", "type": "string", "description": "One of: Low, Med, High." },
+          { "key": "priority", "type": "string", "description": "Y or N." },
+          { "key": "effort", "type": "number", "description": "Effort score 1-3." },
+          { "key": "jira_issue", "type": "string", "description": "Tracking issue key, may be empty." },
+          { "key": "mitigation_strategy", "type": "string", "description": "One of: Acceptance, Avoidance, Control, Transference." },
+          { "key": "action", "type": "string", "description": "Mitigation action headline." },
+          { "key": "status", "type": "string", "description": "One of: To Do, Doing, Done, Abandoned." },
+          { "key": "accountable", "type": "string", "description": "Owner from the Lists sheet, e.g. 'CEO', 'CTO', 'Project team'." },
+          { "key": "action_description", "type": "string", "description": "Detailed action description." }
+        ]
+      }
+    }
+  }
+}

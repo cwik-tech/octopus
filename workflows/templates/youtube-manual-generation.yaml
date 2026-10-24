@@ -1,0 +1,44 @@
+workflow:
+  id: youtube-manual-generation
+  description: Generate screenshot-rich documents in the requested formats from a YouTube video, playlist, or channel.
+  matches:
+    - youtube manual
+    - create a guide from youtube
+    - create manuals from a youtube channel
+    - youtube screenshots and instructions
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: generate-manuals
+      type: team
+      team: youtube-extraction
+      input_artifact: incoming-brief.md
+      result_artifact: extraction-report.md
+      optional_result_artifact_globs:
+        - output/manuals/*/*/manual.md
+        - output/manuals/*/*/manual.docx
+        - output/manuals/*/*/manual.zip
+        - output/manuals/*/*/source-video.mp4
+      requested_result_type: artifact:extraction-report.md
+      recovery_policy: safe_retry
+      brief_suffix: |
+        YouTube manual mode is mandatory. Generate one screenshot-rich document per selected video in only the formats the user requested. Preserve the original user instructions in prepare_manual.documentRequest: formats [markdown] for MD-only, [docx] for Word-only, or both only when requested; purpose takeaways for summaries/main findings, instructions for procedural tutorials. When no format is specified use Markdown. Do not turn a news or conceptual video into invented tutorial steps. Return the actual generated documents as deliverables; extraction-report.md is internal bookkeeping. For a playlist or channel, inspect it once and process each selected video independently, respecting the requested limit and defaulting to the latest 10 eligible videos. Use Gemini when configured and the transcript path when it is not or when Gemini cannot analyze the video.
+  output:
+    from_step: generate-manuals
+    artifact: extraction-report.md
+    primary_artifact_globs:
+      - glob: output/manuals/*/*/manual.md
+        media_type: text/markdown
+        label: Screenshot-rich Markdown manual
+      - glob: output/manuals/*/*/manual.docx
+        media_type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+        label: Screenshot-rich Word manual
+    secondary_artifact_globs:
+      - glob: output/manuals/*/*/manual.zip
+        media_type: application/zip
+        label: Markdown with screenshots (ZIP)
+      - glob: output/manuals/*/*/source-video.mp4
+        media_type: video/mp4
+        label: Downloaded source video
+  on_blocked: escalate_to_user
+  on_failed: escalate_to_user

@@ -1,0 +1,3 @@
+mcp-worker:
+  description: Real detached worker MCP bridge fixture
+  template_path: ./templates/mcp-worker.yaml

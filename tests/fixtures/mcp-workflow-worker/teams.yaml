@@ -1,0 +1,8 @@
+mcp-worker-team:
+  type: team
+  description: Coordinator-free MCP worker bridge team
+  team_path: ./teams/mcp-worker-team
+  input_artifact: incoming-brief.md
+  output_artifact: final.md
+  host_model: fixture/tool-loop
+  host_provider: openai

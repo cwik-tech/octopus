@@ -1,0 +1,49 @@
+workflow:
+  id: discussion-to-writing3
+  description: >
+    Use the problem-thinking-board for structured discussion and decomposition,
+    then hand the resulting artifact to the writing team for drafting.
+  matches:
+    - brainstorm_then_write
+    - think_then_draft
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: discuss
+      type: team
+      team: problem-thinking-board
+      input_artifact: incoming-brief.md
+      result_artifact: output/decomposition-plan.md
+      recovery_policy: safe_retry
+      requested_result_type: artifact:output/decomposition-plan.md
+      runtime_overrides:
+        levels:
+          deliberation:
+            discussion:
+              participants:
+                - contrarian
+                - pragmatist
+                - domain-researcher
+              min_rounds: 1
+              max_rounds: 1
+    - id: write
+      type: team
+      team: writing-team
+      input_artifact: incoming-brief.md
+      result_artifact: final-draft.md
+      recovery_policy: safe_retry
+      requested_result_type: artifact:final-draft.md
+      runtime_overrides:
+        levels:
+          editorial-review:
+            review:
+              max_iterations: 1
+      handoff:
+        from_step: discuss
+        from_artifact: output/decomposition-plan.md
+        to_artifact: incoming-brief.md
+  output:
+    from_step: write
+    artifact: final-draft.md
+  on_blocked: stop
+  on_failed: stop

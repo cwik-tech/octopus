@@ -1,0 +1,66 @@
+workflow:
+  id: discussion-to-executive-summary
+  description: >
+    Use the problem-thinking-board for structured discussion and decomposition,
+    then hand the result to the writing team as an executive-summary deliverable
+    in the strategic-consulting profile.
+  matches:
+    - brainstorm_then_summarize
+    - think_then_summarize
+    - strategy_brief
+    - executive_summary
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: discuss
+      type: team
+      team: problem-thinking-board
+      input_artifact: incoming-brief.md
+      result_artifact: output/decomposition-plan.md
+      recovery_policy: safe_retry
+      requested_result_type: artifact:output/decomposition-plan.md
+      runtime_overrides:
+        levels:
+          deliberation:
+            discussion:
+              participants:
+                - contrarian
+                - pragmatist
+                - domain-researcher
+              min_rounds: 1
+              max_rounds: 1
+              min_successful_participants: 2
+    - id: write
+      type: team
+      team: writing-team
+      input_artifact: incoming-brief.md
+      result_artifact: final-draft.md
+      recovery_policy: safe_retry
+      requested_result_type: artifact:final-draft.md
+      brief_prefix: |
+        Convert the prior analysis into a final executive summary.
+
+        Writing defaults:
+        - Required template: executive-summary
+        - Required style profile: strategic-consulting
+        - Preserve any explicit answer buckets from the original request as scan-friendly bullets or labeled subsections in the final deliverable
+
+        Treat those defaults as mandatory unless the upstream analysis makes the format impossible, in which case explain the mismatch explicitly in the brief.
+      include_initial_brief: true
+      brief_suffix: |
+        The final deliverable must answer the original request directly, using the board output as the analytical basis rather than rewriting it verbatim.
+        If the original request names specific outputs, make each one easy to find in the final document.
+      runtime_overrides:
+        levels:
+          editorial-review:
+            review:
+              max_iterations: 1
+      handoff:
+        from_step: discuss
+        from_artifact: output/decomposition-plan.md
+        to_artifact: incoming-brief.md
+  output:
+    from_step: write
+    artifact: final-draft.md
+  on_blocked: stop
+  on_failed: stop

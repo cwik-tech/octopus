@@ -1,0 +1,17 @@
+workflow:
+  id: gate-check
+  description: Run one deterministic team step whose level is gated by a validator.
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: draft
+      type: team
+      team: review-desk
+      input_artifact: incoming-brief.md
+      result_artifact: draft.md
+      recovery_policy: safe_retry
+  output:
+    from_step: draft
+    artifact: draft.md
+  on_blocked: stop
+  on_failed: stop

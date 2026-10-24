@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Pipeline">
+  <rect width="64" height="64" rx="14" fill="#202633" />
+  <path
+    d="M16 20h14a14 14 0 0 1 0 28H16V20Zm8 7v14h6a7 7 0 0 0 0-14h-6Zm23-7h-7v28h7V20Z"
+    fill="#54a9ff"
+  />
+</svg>

@@ -1,0 +1,202 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Team Configuration Template
+#
+# This file defines a multi-agent team for the Team Runtime.
+# Copy this template, customize it for your team, and place it as
+# team.yaml in your team's root directory.
+#
+# Launch: cd <team-folder> && pi -e <path-to-runtime>/team-runtime/index.ts
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Team Metadata ────────────────────────────────────────────────────────────
+
+team:
+  name: my-team                          # Short identifier (used in logs, session names)
+  description: Description of what this team does
+  version: '0.1.0'
+
+# A team declares no provider or model. Each agent runs with the pair its own
+# file declares, or with the one application default from Settings.
+
+# ── Workspace ────────────────────────────────────────────────────────────────
+# Shared filesystem directory where agents produce and consume artifacts.
+# All levels read from and write to the same workspace.
+
+workspace:
+  path: workspace                        # Relative to this file's directory
+  watch: false                           # Enable file-watching for reactive workflows
+  # routing_agent: router                # Agent to notify on file changes (optional)
+  # external_watches:                    # Watch other teams' workspaces (optional)
+  #   - path: ~/teams/other-team/workspace
+  #     label: other-team-output
+  #     notify: my-agent
+
+# ── Agent Roster ─────────────────────────────────────────────────────────────
+# All agents in the team. Each agent has a name, role, and prompt file. The
+# role is what says how the member is used; there is no grade to choose.
+
+agents:
+  - name: coordinator
+    type: agent                          # 'agent' or 'team' (for team-of-teams)
+    role: Orchestrates the workflow and makes decisions
+    tools:                              # Restrict coordinator to the stage tools it needs
+      - set_roster
+      - create_brief
+      - converse
+    agent_file: agents/coordinator/coordinator.md
+    # experience_enabled: false          # Optional. Defaults to true when omitted.
+    color: 178                           # ANSI-256 color for dashboard
+
+  - name: worker-a
+    type: agent
+    role: First worker agent
+    tools: []
+    agent_file: agents/worker-a/worker-a.md
+    color: 36
+
+  - name: worker-b
+    type: agent
+    role: Second worker agent
+    tools: []
+    agent_file: agents/worker-b/worker-b.md
+    color: 71
+
+  # ── Team-type agent (team-of-teams) ──
+  # - name: sub-team
+  #   type: team
+  #   role: A sub-team that handles a specific domain
+  #   team_path: ~/teams/sub-team/
+  #   experience_enabled: false         # Recommended for executor / delegation-only slots
+  #   input_artifact: brief.md
+  #   output_artifact: output/memo.md
+
+# ── Levels ───────────────────────────────────────────────────────────────────
+# Ordered workflow layers. Each level has a stage type that determines
+# how agents interact within it.
+
+levels:
+  # ── Level 1: Discussion ──
+  - id: discuss
+    name: Discussion
+    order: 0
+    stage:
+      type: discussion                   # discussion | pipeline | chain | broadcast | review
+      coordinator: coordinator
+      participants:
+        - worker-a
+        - worker-b
+      config:
+        mode: brainstorm                 # brainstorm | evaluate | debate | deliberate
+        min_rounds: 1
+        max_rounds: 3
+        constraints:
+          max_time_minutes: 10
+          max_budget_usd: 10
+        output:
+          format: discussion-output.md   # Filename for the output artifact
+          # path: workspace              # Directory (defaults to workspace)
+
+  # ── Level 2: Review ──
+  # - id: review
+  #   name: Review
+  #   order: 1
+  #   stage:
+  #     type: review
+  #     producer: worker-a
+  #     reviewer: worker-b
+  #     config:
+  #       max_iterations: 3
+  #       constraints:
+  #         max_time_minutes: 5
+  #         max_budget_usd: 5
+  #       output:
+  #         format: final-output.md
+
+  # ── Level: Pipeline ──
+  # - id: execute
+  #   name: Execution
+  #   order: 1
+  #   stage:
+  #     type: pipeline
+  #     coordinator: coordinator
+  #     config:
+  #       plan_file: .pi-tasks/plan.md
+  #       parallel: true
+  #       gate:
+  #         type: all_tasks_terminal
+  #         strictness: hard
+  #         quality_checks:
+  #           - tsc
+  #           - build
+
+  # ── Level: Chain ──
+  # - id: refine
+  #   name: Refinement
+  #   order: 1
+  #   stage:
+  #     type: chain
+  #     sequence:
+  #       - worker-a
+  #       - worker-b
+  #     config:
+  #       handoff_format: markdown
+  #       output:
+  #         format: refined-output.md
+
+  # ── Level: Broadcast ──
+  # - id: vote
+  #   name: Voting
+  #   order: 1
+  #   stage:
+  #     type: broadcast
+  #     fan_out:
+  #       - worker-a
+  #       - worker-b
+  #     config:
+  #       aggregation: merge             # merge | vote | best
+  #       output:
+  #         format: votes.md
+
+# ── Gates ────────────────────────────────────────────────────────────────────
+# Transition conditions between levels. A gate must pass before the next level.
+
+gates: []
+  # - from: discuss
+  #   to: review
+  #   condition:
+  #     type: artifact_exists
+  #     artifact: discussion-output.md
+
+  # - from: execute
+  #   to: review
+  #   condition:
+  #     type: all_tasks_terminal
+
+  # - from: review
+  #   to: discuss                        # Loopback gate
+  #   condition:
+  #     type: validation
+  #     validator: worker-b
+  #     strictness: hard                 # hard | soft | off
+
+  # - from: execute
+  #   to: review
+  #   condition:
+  #     type: artifact_exists
+  #     artifact: raw-output.md
+  #   transform:                          # optional — runs after condition passes
+  #     type: script                      # script | agent
+  #     script: scripts/merge.mjs        # path relative to team root
+  #     input: raw-output.md
+  #     output: processed-output.md
+  #     # strictness: hard               # inherits from gate if omitted
+
+# ── Composition (optional) ───────────────────────────────────────────────────
+# For team-of-teams: configure a named `teams.yaml` registry and spawn limits.
+
+# composition:
+#   team_registry: ./teams.yaml          # Explicit registry file of callable teams/agents
+#   spawn_limits:
+#     max_depth: 3                       # Max recursion depth
+#     max_concurrent: 2                  # Max parallel spawned teams
+#     max_total_budget_usd: 50           # Hard budget cap

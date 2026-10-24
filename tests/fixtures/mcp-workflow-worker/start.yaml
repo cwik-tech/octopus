@@ -1,0 +1,2 @@
+entry: mcp-worker-team
+registry: ./teams.yaml

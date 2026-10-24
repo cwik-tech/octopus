@@ -1,0 +1,27 @@
+workflow:
+  id: packaged-smoke
+  description: Run two deterministic worker steps through the real workflow stack.
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: write
+      type: team
+      team: packaged-smoke-team
+      input_artifact: incoming-brief.md
+      result_artifact: final.md
+      recovery_policy: safe_retry
+    - id: finalize
+      type: team
+      team: packaged-smoke-team
+      input_artifact: incoming-brief.md
+      result_artifact: final.md
+      recovery_policy: manual
+      handoff:
+        from_step: write
+        from_artifact: final.md
+        to_artifact: incoming-brief.md
+  output:
+    from_step: finalize
+    artifact: final.md
+  on_blocked: stop
+  on_failed: stop

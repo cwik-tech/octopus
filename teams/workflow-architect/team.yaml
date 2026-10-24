@@ -1,0 +1,81 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Workflow Architect (internal)
+#
+# Internal "design-time" team used by the Create tab to author new workflows.
+# It is NOT executed through the team runtime — the chat backend
+# (domains/workflow-generator/generator-llm.ts) reads only:
+#   - models.orchestration.{model, provider}
+#   - agents[0].agent_file
+# from this file. The rest of the config exists so that team-config.ts can
+# parse the team referenced by teams.yaml without errors.
+# ─────────────────────────────────────────────────────────────────────────────
+
+team:
+  name: workflow-architect
+  description: >
+    Design-time agent that proposes workflow YAML drafts from a chat with the
+    user, using the existing teams and agents as building blocks.
+  version: '0.1.0'
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: design
+  capabilities:
+    - workflow-authoring
+  invocation_modes:
+    - user
+  user_facing: true
+  output_contract:
+    artifacts:
+      - path: routing-decision.md
+        required: true
+        description: Placeholder artifact — design-time team is never executed.
+    completion_artifact: routing-decision.md
+
+agents:
+  - name: workflow-architect
+    type: agent
+    role: >
+      Design-time chat agent. Proposes workflow YAML drafts that compose the
+      existing teams, returning structured JSON each turn for the UI to render
+      as diagram and YAML preview.
+    tools: []
+    agent_file: ../../agents/workflow-architect/workflow-architect.md
+    experience_enabled: false
+    color: 39
+    produces:
+      - path: routing-decision.md
+
+composition:
+  team_registry: ../../teams.yaml
+  spawn_limits:
+    max_depth: 1
+    max_concurrent: 1
+    max_total_budget_usd: 5
+
+levels:
+  - id: design
+    name: Design
+    order: 0
+    permissions:
+      spawn_teams: false
+    stage:
+      type: routing
+      coordinator: workflow-architect
+      config:
+        constraints:
+          max_time_minutes: 5
+          max_budget_usd: 5
+        output:
+          format: routing-decision.md
+          user_review: false
+
+gates:
+  - from: design
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: routing-decision.md

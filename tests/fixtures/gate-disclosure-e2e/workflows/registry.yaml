@@ -1,0 +1,3 @@
+gate-check:
+  description: One deterministic team step whose level is gated by a validator
+  template_path: ./templates/gate-check.yaml

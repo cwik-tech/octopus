@@ -1,0 +1,129 @@
+team:
+  name: board-team
+  description: Discussion board whose lead convenes a subset of the bench
+  version: '0.1.0'
+
+defaults:
+  provider: openai
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: deliberation
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+  output_contract:
+    artifacts:
+      - path: board-result.md
+        required: true
+    completion_artifact: board-result.md
+
+models:
+  orchestration:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: openai
+  strategic:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: openai
+
+agents:
+  - name: board-lead
+    type: agent
+    role: Convene the relevant specialists and synthesize the board result
+    tier: orchestration
+    tools:
+      - set_roster
+      - create_brief
+      - converse
+    agent_file: ../../agents/board-lead/board-lead.md
+    produces:
+      - path: board-result.md
+  - name: spec-alpha
+    type: agent
+    role: Specialist alpha
+    tier: strategic
+    tools: []
+    agent_file: ../../agents/spec-alpha/spec-alpha.md
+  - name: spec-beta
+    type: agent
+    role: Specialist beta
+    tier: strategic
+    tools: []
+    agent_file: ../../agents/spec-beta/spec-beta.md
+  - name: spec-gamma
+    type: agent
+    role: Specialist gamma
+    tier: strategic
+    tools: []
+    agent_file: ../../agents/spec-gamma/spec-gamma.md
+  - name: spec-delta
+    type: agent
+    role: Specialist delta
+    tier: strategic
+    tools: []
+    agent_file: ../../agents/spec-delta/spec-delta.md
+  - name: spec-epsilon
+    type: agent
+    role: Specialist epsilon
+    tier: strategic
+    tools: []
+    agent_file: ../../agents/spec-epsilon/spec-epsilon.md
+  - name: spec-zeta
+    type: agent
+    role: Specialist zeta
+    tier: strategic
+    tools: []
+    agent_file: ../../agents/spec-zeta/spec-zeta.md
+  - name: spec-eta
+    type: agent
+    role: Specialist eta
+    tier: strategic
+    tools: []
+    agent_file: ../../agents/spec-eta/spec-eta.md
+
+levels:
+  - id: deliberation
+    name: Deliberation
+    order: 0
+    stage:
+      type: discussion
+      coordinator: board-lead
+      participants:
+        - spec-alpha
+        - spec-beta
+        - spec-gamma
+        - spec-delta
+        - spec-epsilon
+        - spec-zeta
+        - spec-eta
+      on_agent_failure: skip
+      config:
+        mode: deliberate
+        min_rounds: 1
+        max_rounds: 1
+        min_successful_participants: 1
+        constraints:
+          max_time_minutes: 2
+          agent_timeout_minutes: 1
+          max_budget_usd: 1
+        output:
+          path: ''
+          format: board-result.md
+          user_review: false
+
+gates:
+  - from: deliberation
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: board-result.md

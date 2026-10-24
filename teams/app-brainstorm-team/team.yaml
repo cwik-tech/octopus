@@ -1,0 +1,101 @@
+team:
+  name: "app-brainstorm-team"
+  description: >
+    A compact multi-perspective ideation board for business apps that helps
+    define the app’s goal, target user, and core functionality, while keeping
+    architecture out of scope until the concept is narrowed.
+  version: "0.1.0"
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: setup
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: "incoming-brief.md"
+        required: true
+        description: Runtime brief for the generated team.
+  output_contract:
+    artifacts:
+      - path: "final-result.md"
+        required: true
+        description: Final result produced by the generated team.
+    completion_artifact: "final-result.md"
+
+agents:
+  - name: "problem-decomposer"
+    type: agent
+    role: >
+      Orchestration lead
+    tools: []
+    agent_file: "../../agents/problem-decomposer/problem-decomposer.md"
+    experience_enabled: true
+    produces:
+      - path: "final-result.md"
+
+  - name: "client-lens"
+    type: agent
+    role: >
+      User and stakeholder perspective
+    tools: []
+    agent_file: "../../agents/client-lens/client-lens.md"
+    experience_enabled: true
+
+  - name: "innovator"
+    type: agent
+    role: >
+      Concept generator
+    tools: []
+    agent_file: "../../agents/innovator/innovator.md"
+    experience_enabled: true
+
+  - name: "money-maker"
+    type: agent
+    role: >
+      Business viability lens
+    tools: []
+    agent_file: "../../agents/money-maker/money-maker.md"
+    experience_enabled: true
+
+  - name: "pragmatist"
+    type: agent
+    role: >
+      Scope and feasibility check
+    tools: []
+    agent_file: "../../agents/pragmatist/pragmatist.md"
+    experience_enabled: true
+levels:
+  - id: setup
+    name: Setup
+    order: 0
+    stage:
+      type: discussion
+      coordinator: problem-decomposer
+      participants:
+        - "client-lens"
+        - "innovator"
+        - "money-maker"
+        - "pragmatist"
+      on_agent_failure: skip
+      config:
+        mode: brainstorm
+        min_rounds: 1
+        max_rounds: 3
+        min_successful_participants: 2
+        constraints:
+          max_time_minutes: 4
+          max_budget_usd: 5
+        output:
+          format: "final-result.md"
+          user_review: false
+gates:
+  - from: setup
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: "final-result.md"

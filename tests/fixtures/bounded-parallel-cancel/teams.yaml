@@ -1,0 +1,4 @@
+barrier-pipeline:
+  type: team
+  description: Fixture team whose only level is a bounded-parallel pipeline
+  team_path: ./teams/barrier-pipeline

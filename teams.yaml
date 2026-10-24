@@ -1,0 +1,252 @@
+reception-desk:
+  type: team
+  description: Default intake and routing team led by the receptionist
+  team_path: ./teams/reception-desk
+  host_model: gpt-5.4-mini
+  host_provider: codex
+  tags:
+    - internal
+    - default
+    - intake
+    - routing
+
+problem-thinking-board:
+  type: team
+  description: Specialist board for ambiguous, strategic, or decomposition-heavy problems
+  team_path: ./teams/problem-thinking-board
+  input_artifact: incoming-brief.md
+  output_artifact: output/decomposition-plan.md
+  host_model: gpt-5.4-mini
+  host_provider: codex
+  tags:
+    - strategy
+    - decomposition
+    - board
+    - analysis
+
+writing-team:
+  type: team
+  description: "Drafting, editing, and polishing written deliverables"
+  team_path: "./teams/writing-team"
+  input_artifact: "incoming-brief.md"
+  output_artifact: "final-draft.md"
+  host_model: "gpt-5.4-mini"
+  host_provider: "codex"
+  tags:
+    - "documents"
+    - "drafting"
+    - "editing"
+    - "writing"
+
+research-team:
+  type: team
+  description: Bounded multi-agent web research with evidence synthesis and adversarial quality review
+  team_path: ./teams/research-team
+  input_artifact: incoming-brief.md
+  output_artifact: research-package.md
+  host_model: gpt-5.4-mini
+  host_provider: codex
+  tags:
+    - research
+    - evidence
+    - web-research
+    - deep-research
+
+deep-research-publication-team:
+  type: team
+  description: Evidence-sealed Deep Research editorial and citation validation
+  team_path: ./teams/deep-research-publication-team
+  input_artifact: research-package.md
+  output_artifact: final-draft.md
+  host_model: gpt-5.4-mini
+  host_provider: codex
+  tags:
+    - research
+    - publication
+    - citations
+    - editing
+
+youtube-extraction:
+  type: team
+  description: Complete, resumable YouTube transcript capture with optional source-linked methodology extraction by the configured agent model
+  team_path: ./teams/youtube-extraction
+  input_artifact: incoming-brief.md
+  output_artifact: extraction-report.md
+  host_model: gpt-5.4-mini
+  host_provider: codex
+  tags:
+    - youtube
+    - transcripts
+    - methodology
+
+venture-capital-team:
+  type: team
+  description: Venture-capital investment committee for startup deal screening, diligence, and investment memos
+  team_path: ./teams/venture-capital-team
+  input_artifact: incoming-brief.md
+  output_artifact: output/investment-memo.md
+  host_model: gpt-5.4-mini
+  host_provider: codex
+  tags:
+    - venture-capital
+    - startups
+    - investing
+    - due-diligence
+    - investment-memo
+
+workflow-architect:
+  type: team
+  description: Design-time agent for the Create tab — drafts workflow YAML by chatting with the user. Not a runtime team; never invoked through spawn_team.
+  team_path: ./teams/workflow-architect
+  host_model: gpt-5.4-mini
+  host_provider: codex
+  tags:
+    - internal
+    - design-time
+    - workflow-authoring
+
+resource-architect:
+  type: team
+  description: Design-time agent for the Create tab — creates standalone Agents or runtime Teams. Not a runtime team; never invoked through spawn_team.
+  team_path: ./teams/resource-architect
+  host_model: gpt-5.4-mini
+  host_provider: codex
+  tags:
+    - internal
+    - design-time
+    - resource-authoring
+
+app-brainstorm-team:
+  type: team
+  description: "A compact multi-perspective ideation board for business apps that helps define the app’s goal, target user, and core functionality, while keeping architecture out of scope until the concept is narrowed."
+  team_path: "./teams/app-brainstorm-team"
+  input_artifact: "incoming-brief.md"
+  output_artifact: "final-result.md"
+  tags:
+    - "business-apps"
+    - "ideation"
+    - "product"
+    - "strategy"
+
+software-architecture-board:
+  type: team
+  description: "Exploratory architecture design board for web apps, Electron/Tauri desktop solutions, and knowledge/agent systems. The lead classifies each question and convenes 3-5 relevant specialists per session rather than running the full bench. Standing output is an ADR-style decision record produced on request only — markdown canonical, Word export rendered from the same source."
+  team_path: "./teams/software-architecture-board"
+  input_artifact: "incoming-brief.md"
+  output_artifact: "final-result.md"
+  tags:
+    - "adr"
+    - "agents"
+    - "architecture"
+    - "design"
+    - "desktop"
+    - "knowledge-systems"
+    - "web-apps"
+
+data-engineering-team:
+  type: team
+  description: "Lean DAMA-DMBOK-grounded data engineering team for architecture, pipelines and storage, modeling and metadata, and data quality and reliability."
+  team_path: "./teams/data-engineering-team"
+  input_artifact: "incoming-brief.md"
+  output_artifact: "final-result.md"
+  host_model: "gpt-5.6-sol"
+  host_provider: "codex"
+  tags:
+    - "data-architecture"
+    - "data-engineering"
+    - "data-modeling"
+    - "data-quality"
+    - "metadata"
+    - "pipelines"
+
+knowledge-systems-crew:
+  type: team
+  description: "Execute knowledge base and RAG projects end-to-end: scope requirements, evaluate parsing and extraction fidelity, design and validate retrieval quality, compare tooling and frameworks, and own the operational knowledge-product model post-launch."
+  team_path: "./teams/knowledge-systems-crew"
+  input_artifact: "incoming-brief.md"
+  output_artifact: "final-result.md"
+  tags:
+    - "document-extraction"
+    - "information-retrieval"
+    - "knowledge-governance"
+    - "knowledge-systems"
+    - "rag"
+    - "semantic-search"
+
+teaching-team:
+  type: team
+  description: "Domain-agnostic team for reviewing and improving teaching manuals and educational guides. Combines writing excellence with pedagogical and technical subject-matter evaluation, coordinated by an orchestration lead to surface conflicts, prevent duplication, and synthesize feedback into actionable teaching improvement guidance."
+  team_path: "./teams/teaching-team"
+  input_artifact: "incoming-brief.md"
+  output_artifact: "final-result.md"
+  tags:
+    - "curriculum-development"
+    - "document-review"
+    - "editing"
+    - "education"
+    - "instructional-design"
+    - "pedagogy"
+    - "teaching"
+
+crypto-investment-board:
+  type: team
+  description: "Investment-committee-style board for cryptocurrency investing across two styles: long-term thesis positions in established assets (BTC, ETH, majors) and a risk-budgeted speculative sleeve of early-stage tokens, DeFi, and narrative plays. The lead frames each question as an investment decision, convenes specialists, forces bull/bear tension, and produces a decision record with thesis, risks, and invalidation triggers. A discovery scout surfaces early-stage candidates from forums and social channels, which must pass diligence, risk, contrarian, and dated-fact verification before the portfolio strategist sizes them. Learning is a side benefit delivered through a shared plain-language explainer skill."
+  team_path: "./teams/crypto-investment-board"
+  input_artifact: "incoming-brief.md"
+  output_artifact: "final-result.md"
+  host_model: "gpt-5.4-mini"
+  host_provider: "codex"
+  tags:
+    - "blockchain"
+    - "crypto"
+    - "defi"
+    - "due-diligence"
+    - "early-stage"
+    - "investing"
+    - "portfolio"
+    - "regulation"
+
+furniture-makers:
+  type: team
+  description: "A practical woodworking and furniture-production team for intermediate hobbyists, covering project design, joinery, shop-aware material and tool decisions, finishing, troubleshooting, and optional small-batch selling."
+  team_path: "./teams/furniture-makers"
+  input_artifact: "incoming-brief.md"
+  output_artifact: "final-result.md"
+  host_model: "gpt-5.4-mini"
+  host_provider: "codex"
+  tags:
+    - "finishing"
+    - "furniture-making"
+    - "joinery"
+    - "shop-planning"
+    - "small-batch-production"
+    - "woodworking"
+
+room-to-build-team:
+  type: team
+  description: "Cross-functional product discovery and feasibility team for a mobile-first woodworking app that turns room captures into AI-assisted furniture concepts, manufacturable CAD, and shop-ready 2D drawings."
+  team_path: "./teams/room-to-build-team"
+  input_artifact: "incoming-brief.md"
+  output_artifact: "final-result.md"
+  host_model: "gpt-5.4-mini"
+  host_provider: "codex"
+  tags:
+    - "cad"
+    - "generative-design"
+    - "manufacturing"
+    - "mobile-spatial-capture"
+    - "product-research"
+    - "woodworking"
+
+occasional-poetry-team:
+  type: team
+  description: "A focused team for writing personal occasional poems (weddings, eulogies, birthdays, retirements, toasts, anniversaries, gifts). It gathers specific personal details and sensitivities, matches form and meter to the occasion and delivery mode, drafts with concrete imagery, pressure-tests tone and read-aloud rhythm, and delivers a polished final poem."
+  team_path: "./teams/occasional-poetry-team"
+  input_artifact: "incoming-brief.md"
+  output_artifact: "final-result.md"
+  tags:
+    - "creative-writing"
+    - "editing"
+    - "occasional-verse"
+    - "personal-writing"
+    - "poetry"

@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Node16",
+    "lib": ["ES2022"],
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "verbatimModuleSyntax": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Node16",
+    "resolveJsonModule": true,
+    "noEmit": true
+  },
+  "include": [
+    "*.ts",
+    "contracts/**/*.ts",
+    "core/**/*.ts",
+    "domains/**/*.ts",
+    "services/**/*.ts",
+    "parsers/*.ts",
+    "engines/*.ts",
+    "providers/*.ts",
+    "scripts/app-version.ts",
+    "server/**/*.ts",
+    "team-runtime/**/*.ts",
+    "workflows/team-flow.ts"
+  ],
+  "exclude": ["node_modules", "examples"]
+}

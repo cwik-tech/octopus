@@ -1,0 +1,531 @@
+{
+  "derivedFrom": "87ad988abacda29b6066227edb63d88bdbac7311:server/api-server.ts",
+  "routes": [
+    {
+      "order": 0,
+      "id": "mcp-worker-turn-capability",
+      "stage": "pre-auth-capability",
+      "authorization": "capability",
+      "streaming": "none",
+      "methods": [
+        "POST"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/_worker/test"
+      }
+    },
+    {
+      "order": 1,
+      "id": "browser-tool-capability",
+      "stage": "pre-auth-capability",
+      "authorization": "capability",
+      "streaming": "none",
+      "methods": [
+        "POST"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/_browser/test"
+      }
+    },
+    {
+      "order": 2,
+      "id": "youtube-tool-capability",
+      "stage": "pre-auth-capability",
+      "authorization": "capability",
+      "streaming": "none",
+      "methods": [
+        "POST"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/_youtube/test"
+      }
+    },
+    {
+      "order": 3,
+      "id": "generate-word-tool-capability",
+      "stage": "pre-auth-capability",
+      "authorization": "capability",
+      "streaming": "none",
+      "methods": [
+        "POST"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/_word/test"
+      }
+    },
+    {
+      "order": 4,
+      "id": "generate-excel-tool-capability",
+      "stage": "pre-auth-capability",
+      "authorization": "capability",
+      "streaming": "none",
+      "methods": [
+        "POST"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/_excel/test"
+      }
+    },
+    {
+      "order": 5,
+      "id": "health",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/health"
+      }
+    },
+    {
+      "order": 6,
+      "id": "deep-research-settings",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/settings/deep-research"
+      }
+    },
+    {
+      "order": 7,
+      "id": "scheduling-settings",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/settings/scheduling"
+      }
+    },
+    {
+      "order": 8,
+      "id": "batch-folder-grants",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/settings/batch-folder-grants"
+      }
+    },
+    {
+      "order": 9,
+      "id": "browser-settings-and-activity",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "PUT",
+        "POST"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^(?:/settings/browser(?:/(?:open-profile|stop))?|/sessions/[^/]+/browser-activity(?:/favicon|/[^/]+/attachment)?)$"
+      }
+    },
+    {
+      "order": 10,
+      "id": "youtube-settings",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "PATCH",
+        "POST"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/settings/youtube(?:/validate|/gemini/(?:validate|models))?$"
+      }
+    },
+    {
+      "order": 11,
+      "id": "scheduling-queue",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/scheduling/queue"
+      }
+    },
+    {
+      "order": 12,
+      "id": "schedules",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/schedules(?:/.*)?$"
+      }
+    },
+    {
+      "order": 13,
+      "id": "batches",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/batches(?:/.*)?$"
+      }
+    },
+    {
+      "order": 14,
+      "id": "provider-execute",
+      "stage": "api",
+      "authorization": "api-or-broker",
+      "streaming": "none",
+      "methods": [
+        "POST"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/settings/provider-execute"
+      }
+    },
+    {
+      "order": 15,
+      "id": "provider-settings",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/settings/(?:providers(?:/[^/]+(?:/(?:validate|models))?)?|model-catalog|default-model|cli(?:/refresh|/[^/]+(?:/models)?))$"
+      }
+    },
+    {
+      "order": 16,
+      "id": "mcp-settings",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/settings/mcps(?:/.*)?$"
+      }
+    },
+    {
+      "order": 17,
+      "id": "execution-journals",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/execution-journals(?:/[^/]+/[^/]+/[^/]+(?:/resolutions)?)?$"
+      }
+    },
+    {
+      "order": 18,
+      "id": "mcp-resources",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/sessions/[^/]+/mcp-resources(?:/imports)?$"
+      }
+    },
+    {
+      "order": 19,
+      "id": "mcp-interactions",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/sessions/[^/]+/mcp-interactions(?:/[^/]+/respond)?$"
+      }
+    },
+    {
+      "order": 20,
+      "id": "run-collection",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "path": {
+        "kind": "exact",
+        "path": "/runs"
+      }
+    },
+    {
+      "order": 21,
+      "id": "workflows",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST",
+        "PATCH",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^(?:/workflows(?:/[^/]+)?|/create/(?:teams|turn|validate-yaml|save))$"
+      }
+    },
+    {
+      "order": 22,
+      "id": "create-support",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/create/(?:jobs/[^/]+/cancel|reveal-artifact|chat-defaults)$"
+      }
+    },
+    {
+      "order": 23,
+      "id": "resource-architect",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/create/resource-architect/(?:turn|metrics|jobs(?:/[^/]+(?:/retry)?)?)$"
+      }
+    },
+    {
+      "order": 24,
+      "id": "team-builder",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/create/team-builder/teams(?:/[^/]+(?:/agents(?:/[^/]+)?)?)?$"
+      }
+    },
+    {
+      "order": 25,
+      "id": "team-files",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/create/team-files/[^/]+/files(?:/[^/]+)?$"
+      }
+    },
+    {
+      "order": 26,
+      "id": "mcp-agent-grants",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "PATCH"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/create/agents/[^/]+/mcp-grants$"
+      }
+    },
+    {
+      "order": 27,
+      "id": "agents",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/create/agents(?:$|/(?:teams|health|list-skills|draft|commit|refine|save|delete|add-to-team|package/(?:add|import-preview|import|remove)|[^/]+(?:/delete-preview)?))$"
+      }
+    },
+    {
+      "order": 28,
+      "id": "create-not-found",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "HEAD",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "prefix",
+        "prefix": "/create/"
+      }
+    },
+    {
+      "order": 29,
+      "id": "team-metadata",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/(?:api/)?team$"
+      }
+    },
+    {
+      "order": 30,
+      "id": "projects",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/projects(?:$|/.*$)"
+      }
+    },
+    {
+      "order": 31,
+      "id": "sessions",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/sessions(?:$|/.*$)"
+      }
+    },
+    {
+      "order": 32,
+      "id": "run-events",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "sse",
+      "methods": [
+        "GET"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/runs/[^/]+/events$"
+      }
+    },
+    {
+      "order": 33,
+      "id": "run-details",
+      "stage": "api",
+      "authorization": "api",
+      "streaming": "none",
+      "methods": [
+        "GET"
+      ],
+      "path": {
+        "kind": "pattern",
+        "pattern": "^/runs/[^/]+(?:/.*)?$"
+      }
+    }
+  ]
+}

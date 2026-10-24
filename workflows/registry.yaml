@@ -1,0 +1,112 @@
+discussion-to-executive-summary:
+  description: Run problem discussion first, then package the result as an executive summary in the strategic-consulting profile.
+  template_path: ./templates/discussion-to-executive-summary.yaml
+  tags:
+    - discussion
+    - writing
+    - executive-summary
+    - strategy
+    - synthesis
+  capabilities:
+    - brainstorm_then_summarize
+    - think_then_summarize
+    - strategy_brief
+    - executive_summary
+discussion-to-writing3:
+  description: 'Use the problem-thinking-board for structured discussion and decomposition, then hand the resulting artifact to the writing team for drafting.'
+  template_path: ./templates/discussion-to-writing.yaml
+  tags:
+    - discussion
+    - writing
+  capabilities:
+    - brainstorm_then_write
+    - think_then_draft
+
+discussion-feedback-discussion-writing:
+  description: Run a two-agent discussion, collect structured human feedback, continue the discussion, and write a final report.
+  template_path: ./templates/discussion-feedback-discussion-writing.yaml
+  tags:
+    - discussion
+    - human-in-the-loop
+    - writing
+  capabilities:
+    - discuss_review_revise_write
+    - human_in_the_loop_discussion
+
+plan-site-structure:
+  description: 'Plan the information architecture and structure for a new website by pressure-testing assumptions on the problem-thinking board, then produce a structured site blueprint via the writing team.'
+  template_path: ./user-generated/plan-site-structure.yaml
+  capabilities:
+    - site_structure_planning
+    - website_ia
+    - site_map
+
+clarify-debate-write:
+  description: 'Pressure-test your request with a strategic board discussion (contrarian + pragmatist, two rounds), then hand off to the writing team for a final draft.'
+  template_path: ./user-generated/test1-clarify-discuss-write.yaml
+  capabilities:
+    - ask_debate_write
+    - structured_deliberation
+
+deep-research-report:
+  description: Execute an approved agentic research swarm, quality-audit the evidence, and publish Markdown plus DOCX.
+  template_path: ./templates/deep-research-to-document.yaml
+  tags:
+    - deep-research
+    - batch-ineligible
+    - research
+    - evidence
+    - writing
+    - docx
+  capabilities:
+    - deep_research
+    - bounded_parallel_research
+    - evidence_quality_review
+    - markdown_and_docx
+
+youtube-transcript-extraction:
+  description: Capture complete, resumable transcripts from a YouTube video, playlist, or channel.
+  template_path: ./templates/youtube-transcript-extraction.yaml
+  tags:
+    - youtube
+    - transcripts
+    - extraction
+  capabilities:
+    - youtube_transcript
+    - youtube_playlist
+    - youtube_channel
+
+youtube-methodology-extraction:
+  description: Capture YouTube transcripts and use the configured agent model to produce source-linked methods and a consolidated playbook.
+  template_path: ./templates/youtube-methodology-extraction.yaml
+  tags:
+    - youtube
+    - methodology
+    - playbook
+  capabilities:
+    - youtube_methodology
+    - method_extraction
+    - methodology_consolidation
+
+youtube-manual-generation:
+  description: Generate screenshot-rich Markdown and Word manuals from a YouTube video, playlist, or channel.
+  template_path: ./templates/youtube-manual-generation.yaml
+  tags:
+    - youtube
+    - manual
+    - screenshots
+    - docx
+  capabilities:
+    - youtube_manual
+    - youtube_playlist_manuals
+    - youtube_channel_manuals
+    - markdown_and_docx
+
+pitch-deck-evaluation:
+  description: 'Evaluate an uploaded or described startup pitch deck through a venture-capital investment committee discussion, then hand the analysis to the writing team for an investment memo covering market, team, traction, technology, financials, risks, deal structure, and exit potential.'
+  template_path: ./user-generated/pitch-deck-evaluation.yaml
+  capabilities:
+    - pitch_deck_evaluation
+    - startup_diligence
+    - vc_investment_memo
+    - deal_screening

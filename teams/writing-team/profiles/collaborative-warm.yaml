@@ -1,0 +1,58 @@
+name: collaborative-warm
+description: >
+  For workshop outputs, team alignment documents, and facilitation notes.
+  Inclusive, shared ownership, designed to align rather than direct.
+
+# Tone and register
+tone: collaborative
+formality: medium
+hedging: moderate
+
+# Sentence and vocabulary
+sentence_length: mixed               # Short sentences for action items. Medium for context.
+vocabulary: accessible-professional  # Avoid jargon. Conversational but professional.
+voice: active                        # Active throughout
+person: first-plural                 # "We agreed...", "Our next steps...", "Together, we..."
+
+# Structure preferences
+structure_preference: context-then-actions   # Provide context, then clear next steps
+executive_summary: optional                  # Include if document is long or shared broadly
+max_options_presented: none                  # Not a recommendation format — use for alignment
+
+# Hedging rules
+permitted_hedges:
+  - "we believe"
+  - "our view is"
+  - "we'd suggest"
+  - "it might be worth exploring"
+forbidden_hedges:
+  - "one could argue"                # Too distancing
+  - "it has been noted"              # Passive and distancing
+
+# Person rules
+person_notes: >
+  Use "we" throughout to reflect shared ownership. Avoid "I" (too individual)
+  or "the team" (too distancing when writing for the team). When attributing
+  specific input to a person, use their name: "Sarah raised the concern that..."
+
+# Specific conventions
+action_items: required               # Workshop and alignment docs must have clear actions
+ownership_in_actions: required       # Every action item must have a named owner
+tone_for_challenges: constructive    # Frame challenges as shared problems, not failures
+
+# Length guidance
+target_length_pages:
+  workshop_summary: "3-6"
+  status_update: "1-3"
+  alignment_document: "4-8"
+
+# Examples of the right register
+calibration_example: >
+  We had a productive discussion about the enterprise sales motion and
+  reached some important conclusions together. The core insight from the
+  session: our current process was built for mid-market velocity, and
+  enterprise deals need a different cadence. We've seen this in the numbers —
+  deals are taking nearly twice as long as they did 18 months ago, and
+  our costs have risen accordingly. That's not a failure; it's a signal
+  that we're in a transition phase and need to adapt. Here's what we
+  agreed to do about it.

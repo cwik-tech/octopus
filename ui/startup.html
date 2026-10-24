@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Octopus</title>
+  </head>
+  <body class="startup bg-background text-foreground font-sans">
+    <main class="flex min-h-screen flex-col items-center justify-center gap-5" style="-webkit-app-region: drag">
+      <div role="img" aria-label="Octopus" class="size-40">
+        <img id="startup-icon" src="../public/icon.png" alt="" class="size-full object-contain" />
+        <canvas id="startup-animation" width="320" height="320" class="size-full" aria-hidden="true" hidden></canvas>
+      </div>
+      <div class="flex flex-col items-center gap-3">
+        <h1 class="text-2xl font-semibold tracking-tight">Octopus</h1>
+      </div>
+      <div role="status" class="flex items-center gap-3 text-sm text-muted-foreground">
+        <span aria-hidden="true" class="size-4 rounded-full border-2 border-primary/20 border-t-primary motion-safe:animate-spin"></span>
+        Getting things ready…
+      </div>
+    </main>
+    <footer aria-label="Application version" class="pointer-events-none fixed inset-x-0 bottom-4 text-center text-xs text-muted-foreground/60">
+      Version %VITE_APP_VERSION%
+    </footer>
+    <script type="module" src="/src/startup.ts"></script>
+  </body>
+</html>

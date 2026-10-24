@@ -1,0 +1,116 @@
+team:
+  name: writing-team
+  description: Deterministic writing pipeline fixture for template validator E2E coverage
+  version: '0.1.0'
+
+defaults:
+  provider: pi
+
+workspace:
+  path: workspace
+  watch: false
+
+workflow:
+  entry_level: brief-and-draft
+  invocation_modes:
+    - user
+    - team
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+  output_contract:
+    artifacts:
+      - path: final-draft.md
+        required: true
+    completion_artifact: final-draft.md
+
+models:
+  orchestration:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: pi
+  strategic:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: pi
+  execution:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: pi
+
+agents:
+  - name: brief-builder
+    type: agent
+    role: Produces a compact structured brief with explicit template selection
+    tier: strategic
+    tools: []
+    agent_file: ../../agents/brief-builder/brief-builder.md
+
+  - name: writer
+    type: agent
+    role: Produces either a structurally valid or invalid executive summary draft
+    tier: execution
+    tools: []
+    agent_file: ../../agents/writer/writer.md
+    produces:
+      - path: draft-package.md
+
+  - name: editor
+    type: agent
+    role: Coordinates the chain and approves only structurally valid drafts
+    tier: orchestration
+    tools:
+      - handoff
+      - submit_for_review
+    agent_file: ../../agents/editor/editor.md
+
+levels:
+  - id: brief-and-draft
+    name: Brief And Draft
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - brief-builder
+        - writer
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 5
+          agent_timeout_minutes: 2
+          max_budget_usd: 5
+        output:
+          format: draft-package.md
+          user_review: false
+
+  - id: editorial-review
+    name: Editorial Review
+    order: 1
+    stage:
+      type: review
+      producer: writer
+      reviewer: editor
+      config:
+        max_iterations: 2
+        on_max_iterations: block
+        constraints:
+          max_time_minutes: 5
+          agent_timeout_minutes: 2
+          max_budget_usd: 5
+        output:
+          format: final-draft.md
+          user_review: false
+
+gates:
+  - from: brief-and-draft
+    to: editorial-review
+    condition:
+      type: artifact_exists
+      artifact: draft-package.md
+
+  - from: editorial-review
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: final-draft.md

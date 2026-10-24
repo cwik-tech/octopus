@@ -1,0 +1,52 @@
+contract:
+  id: "<contract-id>"
+  version: "0.1.0"
+  status: "proposed"
+  dataset_or_event: "<name>"
+  purpose: "<business-purpose>"
+  authority: "<authoritative-source-or-owner>"
+  grain: "<one-record-represents>"
+  producer:
+    owner: "<owner>"
+    support_route: "<route>"
+  consumers:
+    - owner: "<consumer-owner>"
+      use: "<consumer-use>"
+  schema:
+    fields:
+      - name: "<field-name>"
+        type: "<type>"
+        meaning: "<business-meaning>"
+        nullable: false
+        unit: "<unit-or-not-applicable>"
+        classification: "<classification>"
+  delivery:
+    transport: "<transport>"
+    cadence: "<cadence>"
+    ordering_scope: "<scope-or-none>"
+    duplicate_behavior: "<behavior>"
+    freshness_target: "<target>"
+    availability_target: "<target>"
+    retention: "<retention>"
+  compatibility:
+    compatible_changes:
+      - "<change>"
+    breaking_changes:
+      - "<change>"
+    notification_period: "<period>"
+    deprecation_period: "<period>"
+  quality:
+    rule_catalog: "<path-or-id>"
+    invalid_record_action: "<reject-quarantine-or-observe>"
+  security:
+    access_policy: "<policy>"
+    masking_or_tokenization: "<control-or-not-applicable>"
+    deletion_behavior: "<behavior>"
+  lineage:
+    record: "<path-or-id>"
+  escalation:
+    severity_policy: "<policy>"
+    route: "<route>"
+  evidence:
+    - source: "<source>"
+      date: "<yyyy-mm-dd>"

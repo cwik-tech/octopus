@@ -1,0 +1,77 @@
+team:
+  name: routing-desk
+  description: Routing desk that hands the brief to a specialist team
+  version: '0.1.0'
+
+defaults:
+  provider: openai
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: intake
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+  output_contract:
+    artifacts:
+      - path: delegation-drafting-team-result.md
+        required: true
+    completion_artifact: delegation-drafting-team-result.md
+
+agents:
+  - name: router
+    type: agent
+    role: Routes the request to the drafting team and acknowledges the handover
+    tier: orchestration
+    tools:
+      - spawn_team
+    agent_file: ../../agents/router/router.md
+    produces:
+      - path: delegation-drafting-team-result.md
+
+  - name: drafting-team
+    type: team
+    role: Child drafting team this desk delegates to
+    tier: strategic
+    team_path: ../drafting-team
+    input_artifact: incoming-brief.md
+    output_artifact: draft-result.md
+
+composition:
+  team_registry: ../../teams.yaml
+  spawn_limits:
+    max_depth: 3
+    max_concurrent: 1
+    max_total_budget_usd: 20
+
+levels:
+  - id: intake
+    name: Intake
+    order: 0
+    permissions:
+      spawn_teams: true
+    stage:
+      type: routing
+      coordinator: router
+      config:
+        constraints:
+          max_time_minutes: 5
+          max_budget_usd: 5
+        output:
+          format: delegation-drafting-team-result.md
+          user_review: false
+
+gates:
+  - from: intake
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: delegation-drafting-team-result.md

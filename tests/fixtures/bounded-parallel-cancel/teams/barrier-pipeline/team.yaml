@@ -1,0 +1,73 @@
+team:
+  name: "barrier-pipeline"
+  description: >
+    Fixture team with a single coordinator-less bounded-parallel pipeline level,
+    so the runtime autostarts the stage and the real bounded drain executes.
+  version: "0.1.0"
+defaults:
+  provider: "pi"
+workspace:
+  path: ./workspace
+  watch: false
+
+workflow:
+  entry_level: execute
+  capabilities:
+    - fixture
+  invocation_modes:
+    - team
+  user_facing: false
+  input_contract:
+    artifacts:
+      - path: .pi-tasks/plan.md
+        required: true
+        description: Executable plan seeded from the delegated brief.
+  output_contract:
+    artifacts:
+      - path: output/result.md
+        required: false
+        description: Unused by the fixture; the run is cancelled mid-wave.
+    completion_artifact: output/result.md
+
+models:
+  execution:
+    model: "default"
+    thinking: "low"
+    provider: "pi"
+
+agents:
+  - name: "barrier-worker"
+    type: agent
+    role: >
+      Fixture worker dispatched by the bounded-parallel wave.
+    tier: execution
+    tools: []
+    agent_file: "../../agents/barrier-worker/barrier-worker.md"
+    experience_enabled: false
+
+levels:
+  - id: execute
+    name: Execute
+    order: 0
+    stage:
+      type: pipeline
+      participants:
+        - barrier-worker
+      config:
+        plan_file: .pi-tasks/plan.md
+        # Without this, resolvePlanPath treats plan_file as workspace-relative;
+        # the seeded plan lives in the child assignment.
+        run_owned_plan: true
+        execution_mode: bounded_parallel
+        max_concurrency: 2
+        assignment_scope: task
+        parallel: true
+        constraints:
+          max_time_minutes: 30
+          agent_timeout_minutes: 10
+          max_budget_usd: 5
+        output:
+          format: output/result.md
+          user_review: false
+
+gates: []

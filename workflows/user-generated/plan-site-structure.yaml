@@ -1,0 +1,49 @@
+workflow:
+  id: plan-site-structure
+  description: >
+    Plan the information architecture and structure for a new website by
+    pressure-testing assumptions on the problem-thinking board, then produce a
+    structured site blueprint via the writing team.
+  matches:
+    - site_structure_planning
+    - website_ia
+    - site_map
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: discuss-site
+      type: team
+      team: problem-thinking-board
+      input_artifact: incoming-brief.md
+      result_artifact: output/decomposition-plan.md
+      requested_result_type: 'artifact:output/decomposition-plan.md'
+      runtime_overrides:
+        levels:
+          deliberation:
+            discussion:
+              participants:
+                - contrarian
+                - pragmatist
+                - client-lens
+                - pattern-matcher
+                - domain-researcher
+              min_rounds: 1
+              max_rounds: 2
+              min_successful_participants: 2
+    - id: write-site
+      type: team
+      team: writing-team
+      input_artifact: incoming-brief.md
+      result_artifact: final-draft.md
+      requested_result_type: 'artifact:final-draft.md'
+      brief_prefix: 'Convert the site decomposition into a comprehensive site structure document, including sections, navigation hierarchy, and user flow.'
+      include_initial_brief: true
+      handoff:
+        from_step: discuss-site
+        from_artifact: output/decomposition-plan.md
+        to_artifact: incoming-brief.md
+  output:
+    from_step: write-site
+    artifact: final-draft.md
+  on_blocked: stop
+  on_failed: stop

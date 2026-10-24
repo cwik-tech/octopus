@@ -1,0 +1,58 @@
+team:
+  name: minimal-pipeline-smoke
+  description: Minimal pipeline smoke fixture
+
+defaults:
+  provider: openai
+
+workspace:
+  path: workspace
+  watch: false
+
+models:
+  orchestration:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: openai
+  strategic:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: openai
+
+agents:
+  - name: orchestrator
+    type: agent
+    role: Runs the minimal smoke flow
+    tier: orchestration
+    tools:
+      - dispatch
+    agent_file: agents/orchestrator/orchestrator.md
+
+  - name: worker
+    type: agent
+    role: Writes the requested output file
+    tier: strategic
+    agent_file: agents/worker/worker.md
+
+levels:
+  - id: smoke-pipeline
+    name: Smoke Pipeline
+    order: 0
+    stage:
+      type: pipeline
+      coordinator: orchestrator
+      config:
+        plan_file: plan.md
+        parallel: false
+        constraints:
+          max_time_minutes: 5
+          max_budget_usd: 2
+        gate:
+          type: all_tasks_terminal
+          strictness: hard
+
+gates:
+  - from: smoke-pipeline
+    to: done
+    condition:
+      type: all_tasks_terminal

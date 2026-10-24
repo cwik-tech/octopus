@@ -1,0 +1,3 @@
+helper-notes:
+  description: One deterministic team step, used by the helper-disclosure journey
+  template_path: ./templates/helper-notes.yaml

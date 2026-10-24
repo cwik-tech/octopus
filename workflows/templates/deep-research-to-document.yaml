@@ -1,0 +1,80 @@
+workflow:
+  id: deep-research-report
+  description: >
+    Execute an approved bounded Deep Research plan, challenge the evidence and
+    conclusions, run a separate editorial writing review, and publish Markdown
+    plus a Word document.
+  matches:
+    - deep research
+    - agentic research
+    - research report with sources
+    - research report and Word document
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: research
+      type: team
+      team: research-team
+      input_artifact: incoming-brief.md
+      result_artifact: research-package.md
+      result_artifacts:
+        - research/evidence-graph/current.json
+      requested_result_type: artifact:research-package.md
+      recovery_policy: manual
+      brief_prefix: |
+        Execute only the exact approved Deep Research plan embedded below.
+        Preserve the user's scope, exclusions, decision objective, freshness
+        boundary, and worker cap. Do not start research without runtime approval.
+
+    - id: editorial
+      type: team
+      team: deep-research-publication-team
+      input_artifact: research-package.md
+      result_artifact: final-draft.md
+      result_artifacts:
+        - publication-audit.json
+      requested_result_type: artifact:final-draft.md
+      recovery_policy: manual
+      handoff:
+        from_step: research
+        from_artifact: research-package.md
+        to_artifact: research-package.md
+      context_handoffs:
+        - from_step: research
+          from_artifact: research/evidence-graph/current.json
+          to_artifact: research/evidence-graph/current.json
+
+    - id: publish
+      type: transform
+      transform: markdown_to_docx
+      input_artifact: final-draft.md
+      result_artifact: final-report.md
+      result_artifacts:
+        - final-report.docx
+        - publication-audit.json
+      requested_result_type: artifact:final-report.md
+      recovery_policy: idempotent
+      handoff:
+        from_step: editorial
+        from_artifact: final-draft.md
+        to_artifact: final-draft.md
+      provenance_handoff:
+        from_step: research
+        from_artifact: research-package.md
+        evidence_graph_artifact: research/evidence-graph/current.json
+        audit_artifact: publication-audit.json
+
+  output:
+    from_step: publish
+    artifact: final-report.md
+    secondary_artifacts:
+      - from_step: publish
+        artifact: final-report.docx
+        media_type: application/vnd.openxmlformats-officedocument.wordprocessingml.document
+        label: Word document
+      - from_step: publish
+        artifact: publication-audit.json
+        media_type: application/json
+        label: Publication audit
+  on_blocked: escalate_to_user
+  on_failed: escalate_to_user

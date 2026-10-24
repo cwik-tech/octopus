@@ -1,0 +1,26 @@
+routing-desk:
+  type: team
+  description: Routing desk that delegates the brief to the drafting team
+  team_path: ./teams/routing-desk
+  input_artifact: incoming-brief.md
+  output_artifact: delegation-drafting-team-result.md
+  host_model: gpt-5.4-mini
+  host_provider: openai
+
+notes-desk:
+  type: team
+  description: One-step chain used by the helper-disclosure journey
+  team_path: ./teams/notes-desk
+  input_artifact: incoming-brief.md
+  output_artifact: note-result.md
+  host_model: gpt-5.4-mini
+  host_provider: openai
+
+drafting-team:
+  type: team
+  description: Child team the routing desk delegates to
+  team_path: ./teams/drafting-team
+  input_artifact: incoming-brief.md
+  output_artifact: draft-result.md
+  host_model: gpt-5.4-mini
+  host_provider: openai

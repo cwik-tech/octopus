@@ -1,0 +1,25 @@
+workflow:
+  id: youtube-methodology-extraction
+  description: Capture YouTube transcripts, extract a method from each source, and consolidate them into a source-linked playbook.
+  matches:
+    - youtube methodology
+    - extract method from youtube
+    - youtube playbook
+    - consolidate youtube methods
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: extract-methodology
+      type: team
+      team: youtube-extraction
+      input_artifact: incoming-brief.md
+      result_artifact: extraction-report.md
+      requested_result_type: artifact:extraction-report.md
+      recovery_policy: safe_retry
+      brief_suffix: |
+        Methodology mode is explicitly requested. Apply the generalized-methodology-extractor skill after complete transcript capture. Persist per-video methods and a consolidated playbook when multiple videos are available.
+  output:
+    from_step: extract-methodology
+    artifact: extraction-report.md
+  on_blocked: escalate_to_user
+  on_failed: escalate_to_user

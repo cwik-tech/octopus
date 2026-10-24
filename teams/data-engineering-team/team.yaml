@@ -1,0 +1,125 @@
+team:
+  name: "data-engineering-team"
+  description: >
+    Lean DAMA-DMBOK-grounded data engineering team covering architecture and
+    coordination, pipelines and storage, modeling and metadata, and data
+    quality and reliability without assigning one agent to every knowledge area.
+  version: "0.1.0"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: setup
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: "incoming-brief.md"
+        required: true
+        description: Data engineering assignment, constraints, and source material.
+  output_contract:
+    artifacts:
+      - path: "final-result.md"
+        required: true
+        description: Integrated data engineering recommendation or design.
+    completion_artifact: "final-result.md"
+
+agents:
+  - name: "data-engineering-lead"
+    type: agent
+    role: >
+      Owns intake, architecture decisions, work decomposition, cross-agent
+      review, and final synthesis; routes security and governance work to the
+      data-security-specialist and decides when the lean roster needs an
+      external MDM or streaming specialist.
+    tools:
+      - read
+    agent_file: "../../agents/data-engineering-lead/data-engineering-lead.md"
+    experience_enabled: true
+    produces:
+      - path: "final-result.md"
+
+  - name: "data-pipeline-engineer"
+    type: agent
+    role: >
+      Owns batch and streaming ingestion, ETL and ELT, interoperability,
+      orchestration, storage interaction, deployment, and pipeline operations.
+    tools:
+      - read
+    agent_file: "../../agents/data-pipeline-engineer/data-pipeline-engineer.md"
+    experience_enabled: true
+
+  - name: "data-modeling-metadata-engineer"
+    type: agent
+    role: >
+      Owns relational and dimensional modeling, data contracts, naming,
+      metadata, lineage, identity, reference-data implications, and impact analysis.
+    tools:
+      - read
+    agent_file: "../../agents/data-modeling-metadata-engineer/data-modeling-metadata-engineer.md"
+    experience_enabled: true
+
+  - name: "data-quality-reliability-engineer"
+    type: agent
+    role: >
+      Owns profiling, executable quality rules, observability, SLAs and SLOs,
+      incident diagnosis, blast-radius analysis, and remediation controls.
+    tools:
+      - read
+    agent_file: "../../agents/data-quality-reliability-engineer/data-quality-reliability-engineer.md"
+    experience_enabled: true
+
+  - name: "data-security-specialist"
+    type: agent
+    role: >
+      Owns access control, encryption, PII protection, compliance evidence,
+      audit trails, and platform governance; reviews the other specialists'
+      designs for security impact.
+    tools:
+      - read
+    agent_file: "../../agents/data-security-specialist/data-security-specialist.md"
+    experience_enabled: true
+
+  - name: "data-engineering-team-designer"
+    type: agent
+    role: >
+      Data Engineering Team Design Specialist
+    tools: []
+    agent_file: "../../agents/data-engineering-team-designer/data-engineering-team-designer.md"
+    experience_enabled: true
+levels:
+  - id: setup
+    name: Data engineering review
+    order: 0
+    stage:
+      type: discussion
+      coordinator: data-engineering-lead
+      participants:
+        - "data-pipeline-engineer"
+        - "data-modeling-metadata-engineer"
+        - "data-quality-reliability-engineer"
+        - "data-security-specialist"
+        - "data-engineering-team-designer"
+      on_agent_failure: skip
+      config:
+        mode: deliberate
+        min_rounds: 1
+        max_rounds: 3
+        min_successful_participants: 2
+        constraints:
+          max_time_minutes: 8
+          max_budget_usd: 20
+        output:
+          format: "final-result.md"
+          user_review: false
+
+gates:
+  - from: setup
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: "final-result.md"

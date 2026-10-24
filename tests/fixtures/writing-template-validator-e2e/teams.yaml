@@ -1,0 +1,15 @@
+reception-desk:
+  type: team
+  description: Deterministic receptionist fixture for writing template validation
+  team_path: ./teams/reception-desk
+  host_model: gpt-5.4-mini
+  host_provider: openai
+
+writing-team:
+  type: team
+  description: Deterministic writing team fixture for template validation
+  team_path: ./teams/writing-team
+  input_artifact: incoming-brief.md
+  output_artifact: final-draft.md
+  host_model: gpt-5.4-mini
+  host_provider: openai

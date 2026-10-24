@@ -1,0 +1,79 @@
+workflow:
+  id: discussion-feedback-discussion-writing
+  description: >
+    Run an initial two-agent discussion, pause for structured human feedback,
+    continue the discussion with that feedback, then write a final report.
+  matches:
+    - discuss_review_revise_write
+    - human_in_the_loop_discussion
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: discussion-round-one
+      type: team
+      team: problem-thinking-board
+      input_artifact: incoming-brief.md
+      result_artifact: output/decomposition-plan.md
+      recovery_policy: safe_retry
+      requested_result_type: artifact:output/decomposition-plan.md
+      runtime_overrides:
+        levels:
+          deliberation:
+            discussion:
+              participants:
+                - contrarian
+                - pragmatist
+              min_rounds: 1
+              max_rounds: 1
+              min_successful_participants: 2
+    - id: human-feedback
+      type: human-in-the-loop
+      prompt: Review the first discussion round and add feedback for everyone or selected participants.
+      input_artifact: review/round-one.md
+      result_artifact: feedback/round-one.json
+      handoff:
+        from_step: discussion-round-one
+        from_artifact: output/decomposition-plan.md
+        to_artifact: review/round-one.md
+    - id: discussion-round-two
+      type: team
+      team: problem-thinking-board
+      input_artifact: incoming-brief.md
+      result_artifact: output/decomposition-plan.md
+      recovery_policy: safe_retry
+      requested_result_type: artifact:output/decomposition-plan.md
+      runtime_overrides:
+        levels:
+          deliberation:
+            discussion:
+              participants:
+                - contrarian
+                - pragmatist
+              min_rounds: 1
+              max_rounds: 2
+              min_successful_participants: 2
+      handoff:
+        from_step: human-feedback
+        from_artifact: feedback/round-one.json
+        to_artifact: incoming-brief.md
+    - id: write-report
+      type: team
+      team: writing-team
+      input_artifact: incoming-brief.md
+      result_artifact: final-draft.md
+      recovery_policy: safe_retry
+      requested_result_type: artifact:final-draft.md
+      runtime_overrides:
+        levels:
+          editorial-review:
+            review:
+              max_iterations: 1
+      handoff:
+        from_step: discussion-round-two
+        from_artifact: output/decomposition-plan.md
+        to_artifact: incoming-brief.md
+  output:
+    from_step: write-report
+    artifact: final-draft.md
+  on_blocked: stop
+  on_failed: stop

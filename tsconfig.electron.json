@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "./dist-electron",
+    "rootDir": ".",
+    "sourceMap": true
+  },
+  "include": [
+    "contracts/**/*.ts",
+    "core/**/*.ts",
+    "domains/**/*.ts",
+    "electron/**/*.cts",
+    "electron/**/*.ts",
+    "engines/**/*.ts",
+    "parsers/**/*.ts",
+    "providers/**/*.ts",
+    "scripts/**/*.ts",
+    "server/**/*.ts",
+    "services/**/*.ts",
+    "team-runtime/**/*.ts",
+    "workflows/team-flow.ts"
+  ],
+  "exclude": ["node_modules", "examples", "ui"]
+}

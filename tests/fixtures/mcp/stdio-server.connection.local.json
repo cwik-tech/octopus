@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "pipeline-fixture": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "tests/fixtures/mcp/stdio-server.mjs"
+      ],
+      "env": {
+        "MCP_FIXTURE_CALLS_PATH": "/tmp/pipeline-mcp-fixture-calls.jsonl",
+        "MCP_FIXTURE_LIFECYCLE_PATH": "/tmp/pipeline-mcp-fixture-lifecycle.jsonl"
+      }
+    }
+  }
+}

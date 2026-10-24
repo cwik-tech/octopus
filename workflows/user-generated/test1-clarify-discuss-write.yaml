@@ -1,0 +1,46 @@
+workflow:
+  id: clarify-debate-write
+  description: >
+    Pressure-test your request with a strategic board discussion (contrarian +
+    pragmatist, two rounds), then hand off to the writing team for a final
+    draft.
+  matches:
+    - ask_debate_write
+    - structured_deliberation
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: debate-decompose
+      type: team
+      team: problem-thinking-board
+      input_artifact: incoming-brief.md
+      result_artifact: output/decomposition-plan.md
+      requested_result_type: 'artifact:output/decomposition-plan.md'
+      brief_prefix: The user wants a critical review of their problem. Ensure the contrarian challenges assumptions robustly.
+      runtime_overrides:
+        levels:
+          deliberation:
+            discussion:
+              participants:
+                - contrarian
+                - pragmatist
+              min_rounds: 2
+              max_rounds: 2
+              min_successful_participants: 2
+    - id: write
+      type: team
+      team: writing-team
+      input_artifact: incoming-brief.md
+      result_artifact: final-draft.md
+      requested_result_type: 'artifact:final-draft.md'
+      brief_prefix: 'Incorporate the key insights from the strategic board discussion and produce a clear, well-organized deliverable.'
+      include_initial_brief: true
+      handoff:
+        from_step: debate-decompose
+        from_artifact: output/decomposition-plan.md
+        to_artifact: incoming-brief.md
+  output:
+    from_step: write
+    artifact: final-draft.md
+  on_blocked: stop
+  on_failed: stop

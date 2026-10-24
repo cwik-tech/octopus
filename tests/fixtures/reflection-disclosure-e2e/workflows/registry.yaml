@@ -1,0 +1,3 @@
+reflection-check:
+  description: One deterministic broadcast step whose participants reflect after it
+  template_path: ./templates/reflection-check.yaml

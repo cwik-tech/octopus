@@ -1,0 +1,8 @@
+packaged-smoke-team:
+  type: team
+  description: One-step packaged runtime smoke team
+  team_path: ./teams/packaged-smoke-team
+  input_artifact: incoming-brief.md
+  output_artifact: final.md
+  host_model: gpt-5.4-mini
+  host_provider: openai

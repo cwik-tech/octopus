@@ -1,0 +1,172 @@
+team:
+  name: "software-architecture-board"
+  description: >
+    Exploratory architecture design board for web apps, Electron/Tauri desktop
+    solutions, and knowledge/agent systems. The lead classifies each question
+    and convenes 3-5 relevant specialists per session rather than running the
+    full bench. Standing output is an ADR-style decision record produced on
+    request only — markdown canonical, Word export rendered from the same
+    source.
+  version: "0.1.0"
+  created_by_orchestrator: "64e3a74d-4bbf-47c2-96c9-eae3d0827306"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: setup
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: "incoming-brief.md"
+        required: true
+        description: Runtime brief for the generated team.
+  output_contract:
+    artifacts:
+      - path: "final-result.md"
+        required: true
+        description: Final result produced by the generated team.
+    completion_artifact: "final-result.md"
+
+agents:
+  - name: "pragmatist"
+    type: agent
+    role: >
+      Convened — effort realism, resource cost, and scope feasibility including
+      embedding spend and reindex cost
+    tools: []
+    agent_file: "../../agents/pragmatist/pragmatist.md"
+    experience_enabled: true
+
+  - name: "web-researcher"
+    type: agent
+    role: >
+      Convened — dated, source-backed verification of fast-moving external facts
+    tools:
+      - read
+      - research_web
+    agent_file: "../../agents/web-researcher/web-researcher.md"
+    experience_enabled: true
+
+  - name: "architect-lead"
+    type: agent
+    role: >
+      Permanent — classifies the problem, convenes the relevant seats, synthesizes
+      the board discussion, and owns the ADR-style decision record
+    tools: []
+    agent_file: "../../agents/architect-lead/architect-lead.md"
+    experience_enabled: true
+    produces:
+      - path: "final-result.md"
+
+  - name: "architect-critic"
+    type: agent
+    role: >
+      Permanent — adversarial review of complexity budget, premature abstraction,
+      and failure modes at scale
+    tools: []
+    agent_file: "../../agents/architect-critic/architect-critic.md"
+    experience_enabled: true
+
+  - name: "architect-web-platform"
+    type: agent
+    role: >
+      Convened — web and cloud application architecture, API boundaries, auth, and
+      deployment topology
+    tools: []
+    agent_file: "../../agents/architect-web-platform/architect-web-platform.md"
+    experience_enabled: true
+
+  - name: "architect-desktop-runtime"
+    type: agent
+    role: >
+      Convened — Electron and Tauri architecture, IPC, packaging, signing, and
+      macOS/Windows divergence
+    tools: []
+    agent_file: "../../agents/architect-desktop-runtime/architect-desktop-runtime.md"
+    experience_enabled: true
+
+  - name: "architect-knowledge-systems"
+    type: agent
+    role: >
+      Convened — RAG topology, retrieval strategy, chunking, indexing, and
+      evaluation harness
+    tools: []
+    agent_file: "../../agents/architect-knowledge-systems/architect-knowledge-systems.md"
+    experience_enabled: true
+
+  - name: "architect-ontology"
+    type: agent
+    role: >
+      Convened — domain modeling, taxonomies, entity and relation schema, and
+      graph store selection
+    tools: []
+    agent_file: "../../agents/architect-ontology/architect-ontology.md"
+    experience_enabled: true
+
+  - name: "architect-agent-systems"
+    type: agent
+    role: >
+      Convened — agent harness design, memory tiers, context budgeting, runtimes,
+      and evaluation
+    tools: []
+    agent_file: "../../agents/architect-agent-systems/architect-agent-systems.md"
+    experience_enabled: true
+
+  - name: "architect-data-persistence"
+    type: agent
+    role: >
+      Convened — storage architecture, local-first sync, vector and graph stores,
+      migration and schema evolution
+    tools: []
+    agent_file: "../../agents/architect-data-persistence/architect-data-persistence.md"
+    experience_enabled: true
+
+  - name: "architect-security-privacy"
+    type: agent
+    role: >
+      Convened — trust boundaries, sandboxing, secrets, data residency, and agent
+      permission surfaces
+    tools: []
+    agent_file: "../../agents/architect-security-privacy/architect-security-privacy.md"
+    experience_enabled: true
+levels:
+  - id: setup
+    name: Setup
+    order: 0
+    stage:
+      type: discussion
+      coordinator: architect-lead
+      participants:
+        - "pragmatist"
+        - "web-researcher"
+        - "architect-critic"
+        - "architect-web-platform"
+        - "architect-desktop-runtime"
+        - "architect-knowledge-systems"
+        - "architect-ontology"
+        - "architect-agent-systems"
+        - "architect-data-persistence"
+        - "architect-security-privacy"
+      on_agent_failure: skip
+      config:
+        mode: deliberate
+        min_rounds: 1
+        max_rounds: 3
+        min_successful_participants: 3
+        constraints:
+          max_time_minutes: 6
+          max_budget_usd: 20
+        output:
+          format: "final-result.md"
+          user_review: false
+gates:
+  - from: setup
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: "final-result.md"

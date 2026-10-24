@@ -1,0 +1,25 @@
+workflow:
+  id: youtube-transcript-extraction
+  description: Capture complete, resumable transcripts from a YouTube video, playlist, or channel.
+  matches:
+    - youtube transcript
+    - download youtube transcripts
+    - extract youtube channel
+    - extract youtube playlist
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: extract
+      type: team
+      team: youtube-extraction
+      input_artifact: incoming-brief.md
+      result_artifact: extraction-report.md
+      requested_result_type: artifact:extraction-report.md
+      recovery_policy: safe_retry
+      brief_suffix: |
+        Transcript-only mode is mandatory. Capture complete transcripts and do not apply the methodology skill.
+  output:
+    from_step: extract
+    artifact: extraction-report.md
+  on_blocked: escalate_to_user
+  on_failed: escalate_to_user

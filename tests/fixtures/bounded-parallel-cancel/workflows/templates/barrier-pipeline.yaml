@@ -1,0 +1,19 @@
+workflow:
+  id: barrier-pipeline-flow
+  description: >
+    Single team step whose input artifact is the pipeline stage's plan file, so
+    the delegated brief is materialized as the executable plan before autostart.
+  matches:
+    - barrier_pipeline_fixture
+  input:
+    artifact: .pi-tasks/plan.md
+  steps:
+    - id: execute
+      type: team
+      team: barrier-pipeline
+      input_artifact: .pi-tasks/plan.md
+      result_artifact: output/result.md
+      recovery_policy: safe_retry
+  output:
+    from_step: execute
+    artifact: output/result.md

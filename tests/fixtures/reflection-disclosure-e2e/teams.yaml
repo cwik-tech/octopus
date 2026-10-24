@@ -1,0 +1,8 @@
+insight-desk:
+  type: team
+  description: One broadcast round whose participants reflect afterwards
+  team_path: ./teams/insight-desk
+  input_artifact: incoming-brief.md
+  output_artifact: insight.md
+  host_model: gpt-5.4-mini
+  host_provider: openai

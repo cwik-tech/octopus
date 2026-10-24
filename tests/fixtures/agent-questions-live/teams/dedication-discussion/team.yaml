@@ -1,0 +1,65 @@
+team:
+  name: dedication-discussion
+  description: An interviewer and poet prepare a short dedication
+  version: '0.1.0'
+workspace:
+  path: ../../workspace
+  watch: false
+workflow:
+  entry_level: discuss
+  invocation_modes: [user, team]
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+  output_contract:
+    artifacts:
+      - path: dedication.md
+        required: true
+    completion_artifact: dedication.md
+agents:
+  - name: discussion-lead
+    type: agent
+    role: Select the interviewer before the poet, then present the completed dedication
+    tools: [set_roster, create_brief, converse]
+    agent_file: ../../agents/discussion-lead/discussion-lead.md
+    produces:
+      - path: dedication.md
+  - name: brief-interviewer
+    type: agent
+    role: Obtain required missing details and give the poet a complete brief
+    tools: []
+    agent_file: ../../agents/brief-interviewer/brief-interviewer.md
+  - name: poet
+    type: agent
+    role: Write the dedication from the interviewer's completed brief
+    tools: []
+    agent_file: ../../agents/poet/poet.md
+levels:
+  - id: discuss
+    name: Discuss
+    order: 0
+    stage:
+      type: discussion
+      coordinator: discussion-lead
+      participants: [brief-interviewer, poet]
+      on_agent_failure: halt
+      config:
+        mode: deliberate
+        min_rounds: 1
+        max_rounds: 1
+        min_successful_participants: 2
+        constraints:
+          max_time_minutes: 4
+          agent_timeout_minutes: 2
+        output:
+          path: ''
+          format: dedication.md
+          user_review: false
+gates:
+  - from: discuss
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: dedication.md

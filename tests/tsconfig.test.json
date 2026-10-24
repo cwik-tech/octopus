@@ -1,0 +1,30 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "outDir": "../.tests-dist",
+    "rootDir": ".."
+  },
+  "include": [
+    "../*.ts",
+    "../contracts/**/*.ts",
+    "../core/**/*.ts",
+    "../domains/**/*.ts",
+    "../services/**/*.ts",
+    "../parsers/*.ts",
+    "../engines/*.ts",
+    "../scripts/app-version.ts",
+    "../team-runtime/*.ts",
+    "../server/**/*.ts",
+    "../workflows/team-flow.ts",
+    "../tests/**/*.ts"
+  ],
+  "exclude": [
+    "../tests/fixtures/**",
+    "../tests/smoke/**",
+    "../tests/e2e/**",
+    "../tests/electron/**",
+    "../examples/**",
+    "../node_modules"
+  ]
+}

@@ -1,0 +1,15 @@
+reception-desk:
+  type: team
+  description: OpenRouter receptionist fixture for end-to-end delegation tests
+  team_path: ./teams/reception-desk
+  host_model: openai/gpt-4o-mini
+  host_provider: openrouter
+
+writing-team:
+  type: team
+  description: OpenRouter writing team fixture for delegation tests
+  team_path: ./teams/writing-team
+  input_artifact: incoming-brief.md
+  output_artifact: final-draft.md
+  host_model: openai/gpt-4o-mini
+  host_provider: openrouter

@@ -1,0 +1,8 @@
+name: strategic-consulting
+forbidden_hedges:
+  - "straightforward"
+  - "the story is"
+  - "boring"
+banned_additional:
+  - "the board's conclusion is straightforward"
+  - "looks much more attractive"

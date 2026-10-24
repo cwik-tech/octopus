@@ -1,0 +1,64 @@
+team:
+  name: pipeline-assignment-e2e
+  description: End-to-end assignment fixture for the pipeline template
+
+defaults:
+  provider: openai
+
+workspace:
+  path: workspace
+  watch: false
+
+models:
+  orchestration:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: openai
+  strategic:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: openai
+
+agents:
+  - name: orchestrator
+    type: agent
+    role: Runs the end-to-end assignment workflow
+    tier: orchestration
+    tools:
+      - dispatch
+    agent_file: agents/orchestrator/orchestrator.md
+
+  - name: analyst
+    type: agent
+    role: Produces the first assignment artifact
+    tier: strategic
+    agent_file: agents/analyst/analyst.md
+
+  - name: synthesizer
+    type: agent
+    role: Produces the second assignment artifact
+    tier: strategic
+    agent_file: agents/synthesizer/synthesizer.md
+
+levels:
+  - id: assignment-pipeline
+    name: Assignment Pipeline
+    order: 0
+    stage:
+      type: pipeline
+      coordinator: orchestrator
+      config:
+        plan_file: plan.md
+        parallel: false
+        constraints:
+          max_time_minutes: 10
+          max_budget_usd: 5
+        gate:
+          type: all_tasks_terminal
+          strictness: hard
+
+gates:
+  - from: assignment-pipeline
+    to: done
+    condition:
+      type: all_tasks_terminal

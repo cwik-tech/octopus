@@ -1,0 +1,62 @@
+team:
+  name: insight-desk
+  description: Broadcast round whose participant reflects when the level completes
+  version: '0.1.0'
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: gather
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+  output_contract:
+    artifacts:
+      - path: insight.md
+        required: true
+    completion_artifact: insight.md
+
+agents:
+  - name: scout
+    type: agent
+    role: Answers the broadcast
+    tier: execution
+    tools: []
+    agent_file: ../../agents/scout/scout.md
+    # Declared, because the gate below requires this artifact and the launch
+    # validator refuses a gate whose artifact no agent claims. The broadcast
+    # aggregation is what actually writes it.
+    produces:
+      - path: insight.md
+
+levels:
+  - id: gather
+    name: Gather
+    order: 0
+    stage:
+      type: broadcast
+      fan_out:
+        - scout
+      config:
+        aggregation: merge
+        constraints:
+          max_time_minutes: 2
+          agent_timeout_minutes: 1
+          max_budget_usd: 1
+        output:
+          format: insight.md
+          user_review: false
+
+gates:
+  - from: gather
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: insight.md

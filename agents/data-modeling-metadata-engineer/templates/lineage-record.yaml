@@ -1,0 +1,37 @@
+lineage:
+  id: "<lineage-id>"
+  version: "0.1.0"
+  owner: "<owner>"
+  subject: "<dataset-event-report-or-model>"
+  capture:
+    method: "<observed-declared-or-inferred>"
+    system: "<capture-system>"
+    updated_at: "<timestamp>"
+    validation: "<validation-method>"
+  upstream:
+    - id: "<source-id>"
+      owner: "<owner>"
+      interface: "<interface>"
+  transformations:
+    - id: "<transformation-id>"
+      version: "<version>"
+      logic_reference: "<reference>"
+      input_ids:
+        - "<input-id>"
+      output_ids:
+        - "<output-id>"
+      field_mappings:
+        - source: "<source-path>"
+          target: "<target-path>"
+          rule: "<transformation-rule>"
+  downstream:
+    - id: "<consumer-id>"
+      type: "<dataset-report-model-or-application>"
+      owner: "<owner>"
+      criticality: "<criticality>"
+  impact_analysis:
+    tested_change: "<representative-change>"
+    affected_consumers:
+      - "<consumer-id>"
+    gaps:
+      - "<gap>"

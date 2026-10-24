@@ -1,0 +1,112 @@
+team:
+  published_by: "66c81d1e-e278-45d2-a6d2-70f8ac5b5480@sha256:03337e236721a02718c2038c3cf0be6e15f60ceccf877a1150e37e797a06c62e"
+  name: "occasional-poetry-team"
+  description: >
+    A focused team for writing personal occasional poems (weddings, eulogies,
+    birthdays, retirements, toasts, anniversaries, gifts). It gathers specific
+    personal details and sensitivities, matches form and meter to the occasion
+    and delivery mode, drafts with concrete imagery, pressure-tests tone and
+    read-aloud rhythm, and delivers a polished final poem.
+  version: "0.1.0"
+  created_by: "team-builder"
+  created_by_orchestrator: "66c81d1e-e278-45d2-a6d2-70f8ac5b5480"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: setup
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: "incoming-brief.md"
+        required: true
+        description: Runtime brief for the generated team.
+  output_contract:
+    artifacts:
+      - path: "final-result.md"
+        required: true
+        description: Final result produced by the generated team.
+    completion_artifact: "final-result.md"
+
+agents:
+  - name: "editor"
+    type: agent
+    role: >
+      Final line-level polish and brief compliance
+    tools: []
+    agent_file: "../../agents/editor/editor.md"
+    experience_enabled: true
+    produces: []
+
+  - name: "occasional-poetry-lead"
+    type: agent
+    role: >
+      Orchestration lead and owner of the final poem
+    tools: []
+    agent_file: "../../agents/occasional-poetry-lead/occasional-poetry-lead.md"
+    experience_enabled: true
+    produces:
+      - path: "final-result.md"
+
+  - name: "occasion-interviewer"
+    type: agent
+    role: >
+      Personal-detail and sensitivity gatherer
+    tools: []
+    agent_file: "../../agents/occasion-interviewer/occasion-interviewer.md"
+    experience_enabled: true
+
+  - name: "poetic-form-specialist"
+    type: agent
+    role: >
+      Form, meter, and rhyme advisor
+    tools: []
+    agent_file: "../../agents/poetic-form-specialist/poetic-form-specialist.md"
+    experience_enabled: true
+
+  - name: "occasional-poet"
+    type: agent
+    role: >
+      Primary drafter
+    tools: []
+    agent_file: "../../agents/occasional-poet/occasional-poet.md"
+    experience_enabled: true
+
+  - name: "poetry-critic"
+    type: agent
+    role: >
+      Tone, cliché, and read-aloud reviewer
+    tools: []
+    agent_file: "../../agents/poetry-critic/poetry-critic.md"
+    experience_enabled: true
+levels:
+  - id: setup
+    name: Setup
+    order: 0
+    stage:
+      type: discussion
+      coordinator: "occasional-poetry-lead"
+      participants:
+        - "occasion-interviewer"
+        - "poetic-form-specialist"
+        - "occasional-poet"
+        - "poetry-critic"
+        - "editor"
+      config:
+        min_rounds: 1
+        max_rounds: 3
+        output:
+          format: "final-result.md"
+          user_review: false
+
+gates:
+  - from: setup
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: "final-result.md"

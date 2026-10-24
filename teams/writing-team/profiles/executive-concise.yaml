@@ -1,0 +1,53 @@
+name: executive-concise
+description: >
+  For C-suite and board audiences who want the recommendation immediately,
+  supported by just enough evidence to act with confidence.
+
+# Tone and register
+tone: authoritative
+formality: high
+hedging: minimal
+
+# Sentence and vocabulary
+sentence_length: short-to-medium  # 10-18 words average
+vocabulary: formal-business        # No contractions. No jargon without definition.
+voice: active                      # Passive only when actor is unknown or irrelevant
+person: third                      # "The company should..." not "We recommend..."
+
+# Structure preferences
+structure_preference: lead-with-recommendation   # Pyramid Principle default
+executive_summary: required                      # Always include; write last
+max_options_presented: 3                         # Never present more than 3 options
+
+# Hedging rules
+permitted_hedges:
+  - "the data shows"
+  - "the analysis confirms"
+  - "evidence suggests"               # Use sparingly
+forbidden_hedges:
+  - "it might be worth considering"
+  - "perhaps"
+  - "one could argue"
+  - "it could be"
+  - "possibly"
+  - "it appears that"
+
+# Length guidance
+target_length_pages:
+  recommendation: "3-5"
+  assessment: "6-8"
+  proposal: "5-8"
+
+# Banned phrases (in addition to global list)
+banned_additional:
+  - "as you may be aware"            # Condescending
+  - "it goes without saying"         # If it goes without saying, don't say it
+  - "we would like to recommend"     # Weak — just recommend
+
+# Examples of the right register
+calibration_example: >
+  Revenue grew 31% year-over-year. Enterprise now represents 58% of ARR.
+  Customer acquisition cost rose 40% over the same period — the cost of
+  the upmarket shift. The company must optimise its enterprise sales motion
+  before this efficiency gap erodes the margin gains from higher ACVs.
+  Three actions are required immediately.

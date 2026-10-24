@@ -1,0 +1,12 @@
+{
+  "pricingSchemaVersion": 1,
+  "model": "gemini-3.6-flash",
+  "currency": "USD",
+  "inputUsdPerMillionTokens": 1.5,
+  "outputUsdPerMillionTokens": 7.5,
+  "estimatedVideoTokensPerSecond": 300,
+  "estimatedOutputTokens": 6000,
+  "effectiveDate": "2026-07-21",
+  "verifiedAt": "2026-08-12T00:00:00.000Z",
+  "sourceUrl": "https://ai.google.dev/gemini-api/docs/pricing"
+}

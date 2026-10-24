@@ -1,0 +1,17 @@
+workflow:
+  id: reflection-check
+  description: Run one deterministic broadcast step whose participants reflect after.
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: gather
+      type: team
+      team: insight-desk
+      input_artifact: incoming-brief.md
+      result_artifact: insight.md
+      recovery_policy: safe_retry
+  output:
+    from_step: gather
+    artifact: insight.md
+  on_blocked: stop
+  on_failed: stop

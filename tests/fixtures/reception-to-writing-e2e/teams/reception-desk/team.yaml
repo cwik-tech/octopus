@@ -1,0 +1,71 @@
+team:
+  name: reception-desk
+  description: Receptionist fixture that delegates directly to the writing team
+  version: '0.1.0'
+
+defaults:
+  provider: codex
+
+workspace:
+  path: workspace
+  watch: false
+
+models:
+  orchestration:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: codex
+  strategic:
+    model: gpt-5.4-mini
+    thinking: low
+    provider: codex
+
+agents:
+  - name: receptionist
+    type: agent
+    role: Routes the user request to the writing team and returns a short intake acknowledgment
+    tier: orchestration
+    tools:
+      - spawn_team
+    agent_file: ../../agents/receptionist/receptionist.md
+    produces:
+      - path: delegation-writing-team-result.md
+
+  - name: writing-team
+    type: team
+    role: Child writing team used for deterministic end-to-end validation
+    tier: strategic
+    team_path: ../writing-team
+    input_artifact: incoming-brief.md
+    output_artifact: final-draft.md
+
+composition:
+  team_registry: ../../teams.yaml
+  spawn_limits:
+    max_depth: 3
+    max_concurrent: 1
+    max_total_budget_usd: 20
+
+levels:
+  - id: intake
+    name: Intake
+    order: 0
+    permissions:
+      spawn_teams: true
+    stage:
+      type: routing
+      coordinator: receptionist
+      config:
+        constraints:
+          max_time_minutes: 5
+          max_budget_usd: 5
+        output:
+          format: delegation-writing-team-result.md
+          user_review: false
+
+gates:
+  - from: intake
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: delegation-writing-team-result.md

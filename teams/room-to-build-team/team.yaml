@@ -1,0 +1,123 @@
+team:
+  name: "room-to-build-team"
+  description: >
+    Cross-functional product discovery and feasibility team for a mobile-first
+    woodworking app that turns room captures into AI-assisted furniture
+    concepts, manufacturable CAD, and shop-ready 2D drawings.
+  version: "0.1.0"
+  created_by_orchestrator: "e9dd5d3c-e313-48c2-9d97-d69ef6d94f6f"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: setup
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: "incoming-brief.md"
+        required: true
+        description: Runtime brief for the generated team.
+  output_contract:
+    artifacts:
+      - path: "final-result.md"
+        required: true
+        description: Final result produced by the generated team.
+    completion_artifact: "final-result.md"
+
+agents:
+  - name: "furniture-designer"
+    type: agent
+    role: >
+      Furniture design and planning specialist
+    tools: []
+    agent_file: "../../agents/furniture-designer/furniture-designer.md"
+    experience_enabled: true
+
+  - name: "joinery-build-specialist"
+    type: agent
+    role: >
+      Joinery and buildability specialist
+    tools: []
+    agent_file: "../../agents/joinery-build-specialist/joinery-build-specialist.md"
+    experience_enabled: true
+
+  - name: "architect-critic"
+    type: agent
+    role: >
+      Feasibility and complexity reviewer
+    tools: []
+    agent_file: "../../agents/architect-critic/architect-critic.md"
+    experience_enabled: true
+
+  - name: "room-to-build-lead"
+    type: agent
+    role: >
+      Product and technical orchestration lead
+    tools: []
+    agent_file: "../../agents/room-to-build-lead/room-to-build-lead.md"
+    experience_enabled: true
+
+  - name: "cad-manufacturing-specialist"
+    type: agent
+    role: >
+      Woodworking CAD and manufacturing systems specialist
+    tools: []
+    agent_file: "../../agents/cad-manufacturing-specialist/cad-manufacturing-specialist.md"
+    experience_enabled: true
+
+  - name: "mobile-spatial-capture-specialist"
+    type: agent
+    role: >
+      Mobile spatial capture specialist
+    tools: []
+    agent_file: "../../agents/mobile-spatial-capture-specialist/mobile-spatial-capture-specialist.md"
+    experience_enabled: true
+
+  - name: "generative-design-specialist"
+    type: agent
+    role: >
+      Constrained generative furniture design specialist
+    tools: []
+    agent_file: "../../agents/generative-design-specialist/generative-design-specialist.md"
+    experience_enabled: true
+
+  - name: "hobbyist-product-researcher"
+    type: agent
+    role: >
+      Woodworker product research specialist
+    tools: []
+    agent_file: "../../agents/hobbyist-product-researcher/hobbyist-product-researcher.md"
+    experience_enabled: true
+    produces:
+      - path: "final-result.md"
+levels:
+  - id: setup
+    name: Setup
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - "furniture-designer"
+        - "joinery-build-specialist"
+        - "architect-critic"
+        - "room-to-build-lead"
+        - "cad-manufacturing-specialist"
+        - "mobile-spatial-capture-specialist"
+        - "generative-design-specialist"
+        - "hobbyist-product-researcher"
+      config:
+        handoff_format: markdown
+        output:
+          format: "final-result.md"
+          user_review: false
+gates:
+  - from: setup
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: "final-result.md"

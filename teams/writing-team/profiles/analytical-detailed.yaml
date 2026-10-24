@@ -1,0 +1,58 @@
+name: analytical-detailed
+description: >
+  For technical teams, evaluators, and expert audiences who need to
+  understand the analysis in depth and defend conclusions to others.
+
+# Tone and register
+tone: analytical
+formality: medium-high
+hedging: moderate
+
+# Sentence and vocabulary
+sentence_length: medium              # 15-22 words average
+vocabulary: technical-precise        # Domain terminology accepted. Define non-obvious terms.
+voice: active-preferred              # Active default. Passive acceptable for process descriptions.
+person: third                        # "The analysis indicates..." or "Data suggests..."
+
+# Structure preferences
+structure_preference: evidence-first   # Build the case before stating the conclusion
+executive_summary: required            # Required; can be more detailed than executive-concise
+max_options_presented: 5              # Can present more options with trade-off analysis
+
+# Hedging rules
+permitted_hedges:
+  - "the data suggests"
+  - "the evidence indicates"
+  - "this likely reflects"
+  - "the analysis points to"
+  - "based on available data"
+  - "subject to the assumptions below"
+forbidden_hedges:
+  - "one might say"
+  - "it could be argued that"         # State the argument directly
+
+# Length guidance
+target_length_pages:
+  recommendation: "8-15"
+  assessment: "15-25"
+  proposal: "10-18"
+
+# Specific conventions
+data_tables: encouraged              # Tables for comparison and evidence
+appendices: use-freely               # Detailed supporting data goes in appendices
+footnotes: acceptable                # For source citations and methodological notes
+uncertainty_acknowledgment: required # Always state confidence level for projections
+
+# Examples of the right register
+calibration_example: >
+  Revenue grew 31% year-over-year, driven primarily by enterprise contract
+  expansion, which now represents 58% of Annual Recurring Revenue (ARR),
+  up from an estimated 39% in the prior year. However, this shift in
+  customer mix appears to be contributing to efficiency headwinds: customer
+  acquisition cost (CAC) rose 40% over the same period, and the average
+  sales cycle extended from 3.1 to 5.4 months — a 74% increase. These
+  trends suggest the current enterprise sales motion has not yet been
+  optimised for the longer, more complex enterprise buying process. Further
+  segmentation of CAC by deal size and stage would clarify whether the
+  cost increase is structural or a function of early-stage enterprise
+  sales learning curve.

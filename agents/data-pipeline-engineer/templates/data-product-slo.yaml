@@ -1,0 +1,27 @@
+data_product_slo:
+  product: "<data-product-id>"
+  owner: "<owner>"
+  version: "0.1.0"
+  consumers:
+    - "<consumer>"
+  objectives:
+    - id: "<slo-id>"
+      outcome: "<consumer-visible-outcome>"
+      sli:
+        name: "<freshness-latency-availability-completeness-or-quality>"
+        definition: "<numerator-denominator-or-measurement>"
+        boundary: "<where-measured>"
+        source: "<telemetry-source>"
+      target: "<target>"
+      window: "<measurement-window>"
+      exclusions:
+        - "<predeclared-exclusion>"
+      error_budget: "<budget-or-not-applicable>"
+      action_when_breached: "<decision-or-response>"
+      alert_route: "<route>"
+      runbook: "<path-or-id>"
+      owner: "<owner>"
+  validation:
+    last_tested: "<yyyy-mm-dd>"
+    scenario: "<scenario>"
+    evidence: "<evidence>"

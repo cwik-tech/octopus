@@ -1,0 +1,1 @@
+Prepare a concise brief for the requested dedication. Obtain personal details that the user explicitly requires before handing the brief to the poet. Ask only about required missing information, then provide the full brief after the human answers. Never invent a recipient or personal history.

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "agents": [
+    "general-agent", "resource-architect", "reviewer-of-agent-architect", "brief-builder",
+    "research-planner", "research-plan-reviewer", "research-synthesizer", "research-section-writer",
+    "research-escalator", "evidence-critic", "deep-research-writer", "deep-research-publication-editor"
+  ],
+  "teams": ["reception-desk", "writing-team", "research-team", "problem-thinking-board"],
+  "skills": [],
+  "workflowTemplates": [
+    "discussion-to-executive-summary.yaml", "discussion-to-writing.yaml", "discussion-feedback-discussion-writing.yaml",
+    "deep-research-to-document.yaml", "youtube-methodology-extraction.yaml", "youtube-transcript-extraction.yaml", "youtube-manual-generation.yaml"
+  ],
+  "entryTeam": "reception-desk"
+}

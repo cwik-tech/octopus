@@ -1,0 +1,17 @@
+board-team:
+  type: team
+  description: Discussion board used by the team-chat E2E
+  team_path: ./teams/board-team
+  input_artifact: incoming-brief.md
+  output_artifact: board-result.md
+  host_model: gpt-5.4-mini
+  host_provider: openai
+
+line-team:
+  type: team
+  description: Chain team used by the team-chat E2E
+  team_path: ./teams/line-team
+  input_artifact: incoming-brief.md
+  output_artifact: line-result.md
+  host_model: gpt-5.4-mini
+  host_provider: openai

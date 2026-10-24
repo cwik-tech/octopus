@@ -1,0 +1,20 @@
+workflow:
+  id: mcp-worker
+  description: Run one detached workflow agent through the parent MCP broker.
+  mcp_requirements:
+    - capability: marker.echo
+      access: read
+      necessity: required
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: collect-marker
+      type: team
+      team: mcp-worker-team
+      input_artifact: incoming-brief.md
+      result_artifact: final.md
+  output:
+    from_step: collect-marker
+    artifact: final.md
+  on_blocked: stop
+  on_failed: stop

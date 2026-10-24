@@ -1,0 +1,8 @@
+review-desk:
+  type: team
+  description: One drafting step behind a validator gate
+  team_path: ./teams/review-desk
+  input_artifact: incoming-brief.md
+  output_artifact: draft.md
+  host_model: gpt-5.4-mini
+  host_provider: openai

@@ -1,0 +1,20 @@
+// Type-checks the Playwright Electron specs, which tsconfig.test.json leaves
+// out because Playwright transpiles them itself. `npm run typecheck` runs it.
+//
+// It lives inside the repository on purpose: TypeScript looks for Node's type
+// definitions relative to this file, so they resolve once, from the root
+// node_modules/@types. A config outside the repository resolves each package's
+// own nested copy instead, and the duplicates report false event-emitter
+// errors on ChildProcess and FSWatcher.
+{
+  "extends": "./tsconfig.test.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "./electron/**/*.ts"
+  ],
+  "exclude": [
+    "../node_modules"
+  ]
+}

@@ -1,0 +1,97 @@
+team:
+  name: deep-research-publication-team
+  description: >
+    Evidence-sealed editorial review with deterministic claim, citation, and
+    provenance validation.
+  version: "1.0.0"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: publication-review
+  capabilities:
+    - research-publication
+    - evidence-preserving-editing
+    - citation-validation
+  invocation_modes:
+    - team
+  user_facing: false
+  input_contract:
+    artifacts:
+      - path: research-package.md
+        required: true
+        description: Evidence-audited research package.
+      - path: research/evidence-graph/current.json
+        required: true
+        description: Runtime-validated claim and evidence graph.
+  output_contract:
+    artifacts:
+      - path: final-draft.md
+        required: true
+        description: Approved evidence-preserving publication draft.
+      - path: publication-audit.json
+        required: true
+        description: Latest deterministic publication audit.
+    completion_artifact: final-draft.md
+
+agents:
+  - name: deep-research-writer
+    type: agent
+    role: Produces and repairs the evidence-sealed publication draft.
+    tools:
+      - read
+    agent_file: ../../agents/deep-research-writer/deep-research-writer.md
+    experience_enabled: false
+
+  - name: deep-research-publication-editor
+    type: agent
+    role: Reviews report coherence and evidence fidelity after runtime checks.
+    tools:
+      - read
+    agent_file: ../../agents/deep-research-publication-editor/deep-research-publication-editor.md
+    experience_enabled: false
+
+levels:
+  - id: publication-review
+    name: Research Publication Review
+    order: 0
+    stage:
+      type: review
+      producer: deep-research-writer
+      reviewer: deep-research-publication-editor
+      config:
+        max_iterations: 3
+        on_max_iterations: block
+        constraints:
+          max_time_minutes: 15
+          agent_timeout_minutes: 5
+          max_budget_usd: 12
+        research_publication_validation:
+          source_artifact: research-package.md
+          evidence_graph_artifact: research/evidence-graph/current.json
+          audit_artifact: publication-audit.json
+        output:
+          format: final-draft.md
+          user_review: false
+        input_contract:
+          artifacts:
+            - path: research-package.md
+              required: true
+            - path: research/evidence-graph/current.json
+              required: true
+        output_contract:
+          artifacts:
+            - path: final-draft.md
+              required: true
+            - path: publication-audit.json
+              required: true
+          completion_artifact: final-draft.md
+
+gates:
+  - from: publication-review
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: final-draft.md

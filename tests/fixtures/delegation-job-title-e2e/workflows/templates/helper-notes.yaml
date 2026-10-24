@@ -1,0 +1,17 @@
+workflow:
+  id: helper-notes
+  description: Run one deterministic team step through the real workflow stack.
+  input:
+    artifact: incoming-request.md
+  steps:
+    - id: note
+      type: team
+      team: notes-desk
+      input_artifact: incoming-brief.md
+      result_artifact: note-result.md
+      recovery_policy: safe_retry
+  output:
+    from_step: note
+    artifact: note-result.md
+  on_blocked: stop
+  on_failed: stop

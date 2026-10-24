@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; media-src data: blob:; font-src data:; connect-src 'none'; frame-src * about: data: blob: file:; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Canvas HTML preview</title>
+  <style>html,body,iframe{height:100%;width:100%;margin:0;border:0}iframe{display:block}</style>
+</head>
+<body>
+  <iframe title="HTML document" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe>
+  <script>
+    // This standalone document intentionally has its own policy. An app-created
+    // srcdoc/data/blob document would inherit the app's stricter script policy.
+    const preview = document.querySelector('iframe');
+    /** @type {string | undefined} */
+    let previousContent;
+    /**
+     * @param {unknown} value
+     * @returns {value is { kind: 'canvas-html-preview', content: string }}
+     */
+    function isPreviewMessage(value) {
+      // Mirrored preview byte bound: this isolated asset cannot import app code.
+      return typeof value === 'object' && value !== null && !Array.isArray(value)
+        && 'kind' in value && value.kind === 'canvas-html-preview'
+        && 'content' in value && typeof value.content === 'string'
+        && new TextEncoder().encode(value.content).byteLength <= 2 * 1024 * 1024;
+    }
+    function protectNavigation() {
+      // Keep reading state for links (including about:blank, which Chromium
+      // navigates without the native navigation event) and form submissions.
+      document.addEventListener('click', (event) => {
+        const link = event.target instanceof Element ? event.target.closest('a[href],area[href]') : null;
+        if (link && !link.getAttribute('href')?.startsWith('#')) event.preventDefault();
+      }, true);
+      document.addEventListener('submit', (event) => event.preventDefault(), true);
+    }
+    window.addEventListener('message', (event) => {
+      /** @type {unknown} */
+      const message = event.data;
+      if (event.source !== parent || !isPreviewMessage(message) || !preview) return;
+      if (message.content === previousContent) return;
+      previousContent = message.content;
+      // Parent frame-src rejection replaces a document with a Chromium error
+      // page before Electron can cancel navigation. The wrapper therefore lets
+      // Electron deny document navigation; this additional policy independently
+      // blocks frames created by generated content. Other restrictions inherit.
+      const guard = '<script>(' + protectNavigation.toString() + ')()<' + '/script>';
+      preview.srcdoc = '<meta http-equiv="Content-Security-Policy" content="frame-src \'none\'">' + guard + message.content;
+    });
+  </script>
+</body>
+</html>

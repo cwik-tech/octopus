@@ -1,0 +1,66 @@
+team:
+  name: mcp-worker-team
+  description: Coordinator-free chain that must call the parent-owned MCP tool
+  version: '0.1.0'
+
+defaults:
+  provider: openai
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: execute
+  invocation_modes:
+    - team
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+  output_contract:
+    artifacts:
+      - path: final.md
+        required: true
+    completion_artifact: final.md
+
+models:
+  execution:
+    model: fixture/tool-loop
+    thinking: low
+    provider: openai
+
+agents:
+  - name: mcp-worker-agent
+    type: agent
+    role: Use the available marker tool and return its exact result
+    tier: execution
+    tools: []
+    agent_file: ../../agents/mcp-worker-agent/mcp-worker-agent.md
+    produces:
+      - path: final.md
+
+levels:
+  - id: execute
+    name: Execute
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - mcp-worker-agent
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 1
+          agent_timeout_minutes: 1
+          max_budget_usd: 1
+        output:
+          format: final.md
+          user_review: false
+
+gates:
+  - from: execute
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: final.md

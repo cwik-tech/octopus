@@ -1,0 +1,109 @@
+team:
+  name: "teaching-team"
+  description: >
+    Domain-agnostic team for reviewing and improving teaching manuals and
+    educational guides. Combines writing excellence with pedagogical and
+    technical subject-matter evaluation, coordinated by an orchestration lead to
+    surface conflicts, prevent duplication, and synthesize feedback into
+    actionable teaching improvement guidance.
+  version: "0.1.0"
+  created_by_orchestrator: "8d246b2e-df42-4cf1-8e0c-59486c9e4114"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: setup
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: "incoming-brief.md"
+        required: true
+        description: Runtime brief for the generated team.
+  output_contract:
+    artifacts:
+      - path: "final-result.md"
+        required: true
+        description: Final result produced by the generated team.
+    completion_artifact: "final-result.md"
+
+agents:
+  - name: "brief-builder"
+    type: agent
+    role: >
+      Document Brief Scoping Lead
+    tools: []
+    agent_file: "../../agents/brief-builder/brief-builder.md"
+    experience_enabled: true
+
+  - name: "editor"
+    type: agent
+    role: >
+      Manuscript Editor
+    tools: []
+    agent_file: "../../agents/editor/editor.md"
+    experience_enabled: true
+
+  - name: "teaching-team-lead"
+    type: agent
+    role: >
+      Orchestration Lead
+    tools:
+      - "set_roster"
+      - "create_brief"
+      - "converse"
+    agent_file: "../../agents/teaching-team-lead/teaching-team-lead.md"
+    experience_enabled: true
+    produces:
+      - path: "final-result.md"
+
+  - name: "teaching-pedagogy-specialist"
+    type: agent
+    role: >
+      Teaching Methodology Specialist
+    tools: []
+    agent_file: "../../agents/teaching-pedagogy-specialist/teaching-pedagogy-specialist.md"
+    experience_enabled: true
+
+  - name: "subject-matter-technical-reviewer"
+    type: agent
+    role: >
+      Subject Matter and Technical Reviewer
+    tools: []
+    agent_file: "../../agents/subject-matter-technical-reviewer/subject-matter-technical-reviewer.md"
+    experience_enabled: true
+levels:
+  - id: setup
+    name: Setup
+    order: 0
+    stage:
+      type: discussion
+      coordinator: "teaching-team-lead"
+      participants:
+        - "brief-builder"
+        - "editor"
+        - "teaching-pedagogy-specialist"
+        - "subject-matter-technical-reviewer"
+      on_agent_failure: skip
+      config:
+        mode: deliberate
+        min_rounds: 2
+        max_rounds: 6
+        min_successful_participants: 1
+        constraints:
+          max_time_minutes: 20
+          max_budget_usd: 5
+        output:
+          path: ''
+          format: "final-result.md"
+          user_review: false
+gates:
+  - from: setup
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: "final-result.md"

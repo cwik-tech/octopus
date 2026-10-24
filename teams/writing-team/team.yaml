@@ -1,0 +1,115 @@
+team:
+  name: "writing-team"
+  description: >
+    Drafting, editing, and polishing written deliverables
+  version: "0.1.0"
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: brief-and-draft
+  capabilities:
+    - writing
+    - editing
+    - report-generation
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+        description: Intake brief or delegated assignment for the writing pipeline.
+  output_contract:
+    artifacts:
+      - path: final-draft.md
+        required: true
+        description: Final reviewed draft returned by the team.
+    completion_artifact: final-draft.md
+
+agents:
+  - name: "brief-builder"
+    type: agent
+    role: >
+      Scopes the document, audience, template fit, and missing inputs.
+    tools: []
+    agent_file: "../../agents/brief-builder/brief-builder.md"
+    experience_enabled: true
+
+  - name: "writer"
+    type: agent
+    role: >
+      Produces the first draft from the structured brief.
+    tools: []
+    agent_file: "../../agents/writer/writer.md"
+    produces:
+      - path: draft-package.md
+    experience_enabled: false
+
+  - name: "editor"
+    type: agent
+    role: >
+      Reviews the draft for logic, clarity, style, and brief compliance, and
+      coordinates the writing pipeline.
+    tools:
+      - "handoff"
+      - "submit_for_review"
+    agent_file: "../../agents/editor/editor.md"
+    experience_enabled: true
+levels:
+  - id: brief-and-draft
+    name: Brief And Draft
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - brief-builder
+        - writer
+      config:
+        handoff_format: markdown
+        preserve_initial_input: true
+        constraints:
+          max_time_minutes: 10
+          agent_timeout_minutes: 3
+          max_budget_usd: 8
+        output:
+          format: draft-package.md
+          user_review: false
+
+  - id: editorial-review
+    name: Editorial Review
+    order: 1
+    stage:
+      type: review
+      producer: writer
+      reviewer: editor
+      config:
+        max_iterations: 3
+        # on_max_iterations options:
+        # - block
+        # - approve_latest
+        # - approve_latest_with_warnings
+        # - escalate_to_user
+        on_max_iterations: approve_latest_with_warnings
+        constraints:
+          max_time_minutes: 10
+          agent_timeout_minutes: 3
+          max_budget_usd: 8
+        output:
+          format: final-draft.md
+          user_review: false
+
+gates:
+  - from: brief-and-draft
+    to: editorial-review
+    condition:
+      type: artifact_exists
+      artifact: draft-package.md
+
+  - from: editorial-review
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: final-draft.md

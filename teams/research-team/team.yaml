@@ -1,0 +1,415 @@
+team:
+  name: research-team
+  description: >
+    Executes an explicitly approved Deep Research plan with bounded parallel
+    web researchers, evidence-only synthesis, and adversarial quality review.
+  version: "1.0.0"
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: prepare-approved-plan
+  capabilities:
+    - deep-research
+    - web-research
+    - evidence-synthesis
+    - quality-review
+  invocation_modes:
+    - team
+  user_facing: false
+  input_contract:
+    artifacts:
+      - path: incoming-brief.md
+        required: true
+        description: User brief containing the exact runtime-approved ResearchPlan.
+  output_contract:
+    artifacts:
+      - path: research-package.md
+        required: true
+        description: Evidence-audited research report ready for the writing team.
+      - path: research/evidence-graph/current.json
+        required: true
+        description: Claim-level evidence, independence, and gap graph.
+    completion_artifact: research-package.md
+
+agents:
+  - name: research-planner
+    type: agent
+    role: Confirms the immutable approved plan before runtime materialization.
+    tools: []
+    agent_file: ../../agents/research-planner/research-planner.md
+    experience_enabled: false
+    produces:
+      - path: research/plan-ready.md
+      - path: research/approved-plan.json
+        description: Runtime-materialized immutable approved plan.
+
+  - name: web-researcher
+    type: agent
+    role: Trusted evidence-acquisition researcher whose bounded role is supplied by the approved plan.
+    tools:
+      - read
+      - research_web
+      - browser
+    agent_file: ../../agents/web-researcher/web-researcher.md
+    experience_enabled: false
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: research-synthesizer
+    type: agent
+    role: Synthesizes the runtime-owned evidence bundle into a claim-traceable report.
+    # No tools. The runtime materializes the synthesis bundle into the request.
+    tools: []
+    agent_file: ../../agents/research-synthesizer/research-synthesizer.md
+    experience_enabled: false
+    produces:
+      - path: research-package.md
+
+  - name: research-section-writer
+    type: agent
+    role: Drafts one evidence-bound section from a runtime-owned dossier.
+    # No tools. The runtime materializes the section dossier into the request,
+    # so the writer never needs — and must never have — filesystem access.
+    tools: []
+    agent_file: ../../agents/research-section-writer/research-section-writer.md
+    experience_enabled: false
+    on_failure:
+      policy: retry
+      max_retries: 1
+
+  - name: evidence-critic
+    type: agent
+    role: Audits research coverage, source integrity, contradictions, and decision quality.
+    tools:
+      - read
+    agent_file: ../../agents/evidence-critic/evidence-critic.md
+    experience_enabled: false
+    on_failure:
+      policy: retry
+      max_retries: 1
+    produces:
+      - path: research/quality/current-verdict.json
+
+  - name: research-escalator
+    type: agent
+    role: Converts exhausted or non-researchable quality gaps into a user-facing blocker.
+    tools: []
+    agent_file: ../../agents/research-escalator/research-escalator.md
+    experience_enabled: false
+
+levels:
+  - id: prepare-approved-plan
+    name: Prepare Approved Plan
+    order: 0
+    stage:
+      type: chain
+      sequence:
+        - research-planner
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 3
+          agent_timeout_minutes: 2
+          max_budget_usd: 2
+        output:
+          path: research
+          format: plan-ready.md
+          user_review: false
+
+  - id: collect-evidence
+    name: Collect Evidence
+    order: 1
+    stage:
+      type: pipeline
+      participants:
+        - web-researcher
+      config:
+        plan_file: research/plan.md
+        plan_artifact: research/approved-plan.json
+        deadline_artifact: research/runtime-limits.json
+        execution_mode: bounded_parallel
+        max_concurrency: 8
+        assignment_scope: task
+        parallel: true
+        constraints:
+          max_time_minutes: 60
+          agent_timeout_minutes: 20
+          max_budget_usd: 40
+        gate:
+          type: all_tasks_terminal
+          strictness: hard
+
+  - id: draft-sections
+    name: Draft Evidence Sections
+    order: 2
+    stage:
+      type: pipeline
+      participants:
+        - research-section-writer
+      config:
+        plan_file: research/section-plan.md
+        run_owned_plan: true
+        persist_result: true
+        deadline_artifact: research/runtime-limits.json
+        section_dossier_drafting:
+          plan_artifact: research/approved-plan.json
+          dossier_index_artifact: research/sections/current-index.json
+          context_window_tokens: 200000
+          output_reserve_tokens: 32000
+        execution_mode: bounded_parallel
+        max_concurrency: 8
+        assignment_scope: stage
+        parallel: true
+        constraints:
+          max_time_minutes: 20
+          agent_timeout_minutes: 8
+          max_budget_usd: 12
+        gate:
+          type: all_tasks_terminal
+          strictness: hard
+        input_contract:
+          artifacts:
+            - path: research/evidence-graph/current.json
+              required: true
+            - path: research/sections/current-index.json
+              required: true
+
+  - id: synthesize-evidence
+    name: Synthesize Evidence
+    order: 3
+    stage:
+      type: chain
+      sequence:
+        - research-synthesizer
+      config:
+        handoff_format: markdown
+        deadline_artifact: research/runtime-limits.json
+        # One runtime-owned bundle, admitted before dispatch. Without this the
+        # step receives the first declared input artifact — the whole synthesis
+        # packet — which overflows the window on a large multi-section run.
+        research_synthesis_bundle:
+          plan_artifact: research/approved-plan.json
+          dossier_index_artifact: research/sections/current-index.json
+          synthesis_artifact: research/synthesis/current.json
+          corrections_artifact: research/corrections/current.json
+          context_window_tokens: 200000
+          output_reserve_tokens: 32000
+        constraints:
+          max_time_minutes: 12
+          agent_timeout_minutes: 8
+          max_budget_usd: 8
+        output:
+          format: research-package.md
+          user_review: false
+        input_contract:
+          artifacts:
+            - path: research/synthesis/current.json
+              required: true
+            - path: research/approved-plan.json
+              required: true
+            - path: research/evidence/current-manifest.json
+              required: true
+            - path: research/evidence-graph/current.json
+              required: true
+            - path: research/sections/current-index.json
+              required: true
+        output_contract:
+          artifacts:
+            - path: research-package.md
+              required: true
+          completion_artifact: research-package.md
+
+  - id: quality-audit
+    name: Research Quality Audit
+    order: 4
+    stage:
+      type: chain
+      sequence:
+        - evidence-critic
+      config:
+        handoff_format: json
+        structured_output: deep_research_quality_verdict
+        deadline_artifact: research/runtime-limits.json
+        # Resolve the authoritative audit inputs inside this assignment before
+        # provider dispatch. The critic may run from a shared workspace whose
+        # root contains artifacts from older runs.
+        research_quality_bundle:
+          plan_artifact: research/approved-plan.json
+          quality_packet_artifact: research/quality/current-packet.json
+          deterministic_verdict_artifact: research/quality/deterministic-verdict.json
+          report_artifact: research-package.md
+          context_window_tokens: 200000
+          output_reserve_tokens: 32000
+        constraints:
+          max_time_minutes: 4
+          agent_timeout_minutes: 3
+          max_budget_usd: 6
+        output:
+          path: research/quality
+          format: current-verdict.json
+          user_review: false
+        input_contract:
+          artifacts:
+            - path: research/quality/current-packet.json
+              required: true
+            - path: research/quality/deterministic-verdict.json
+              required: true
+            - path: research-package.md
+              required: true
+            - path: research/approved-plan.json
+              required: true
+            - path: research/evidence/current-summary.md
+              required: true
+        output_contract:
+          artifacts:
+            - path: research/quality/current-verdict.json
+              required: true
+          completion_artifact: research/quality/current-verdict.json
+
+  - id: research-escalation
+    name: Research Escalation
+    order: 5
+    stage:
+      type: chain
+      sequence:
+        - research-escalator
+      config:
+        handoff_format: markdown
+        constraints:
+          max_time_minutes: 3
+          agent_timeout_minutes: 2
+          max_budget_usd: 2
+        output:
+          path: research/quality
+          format: escalation.md
+          user_review: false
+        input_contract:
+          artifacts:
+            - path: research/quality/current-verdict.json
+              required: true
+        output_contract:
+          artifacts:
+            - path: research/quality/escalation.md
+              required: true
+          completion_artifact: research/quality/escalation.md
+
+gates:
+  - from: prepare-approved-plan
+    to: collect-evidence
+    condition:
+      type: artifact_exists
+      artifact: research/plan-ready.md
+    transform:
+      type: script
+      strictness: hard
+      script: ./scripts/materialize-approved-plan.mjs
+      input: research/plan-ready.md
+      output: research/approved-plan.json
+      timeout_minutes: 1
+
+  - from: collect-evidence
+    to: draft-sections
+    condition:
+      type: artifact_json
+      artifact: research/approved-plan.json
+      pointer: /executionPolicy/synthesis/mode
+      operator: equals
+      value: section_dossiers
+
+  - from: collect-evidence
+    to: synthesize-evidence
+    condition:
+      type: artifact_json
+      artifact: research/approved-plan.json
+      pointer: /executionPolicy/synthesis/mode
+      operator: equals
+      value: single_pass
+
+  - from: collect-evidence
+    to: synthesize-evidence
+    condition:
+      type: all_tasks_terminal
+
+  - from: draft-sections
+    to: synthesize-evidence
+    condition:
+      type: all_tasks_terminal
+
+  - from: synthesize-evidence
+    to: quality-audit
+    condition:
+      type: artifact_exists
+      artifact: research-package.md
+
+  - from: quality-audit
+    to: synthesize-evidence
+    reset_scope: target_through_source
+    max_loopbacks: 2
+    condition:
+      type: artifact_json
+      artifact: research/quality/current-verdict.json
+      pointer: /correctionRoute
+      operator: equals
+      value: synthesis
+    transform:
+      type: script
+      strictness: hard
+      script: ./scripts/prepare-resynthesis-wave.mjs
+      input: research/quality/current-verdict.json
+      output: research/corrections/current.json
+      timeout_minutes: 1
+
+  - from: quality-audit
+    to: collect-evidence
+    reset_scope: target_through_source
+    max_loopbacks: 2
+    condition:
+      type: artifact_json
+      artifact: research/quality/current-verdict.json
+      pointer: /correctionRoute
+      operator: equals
+      value: research
+    transform:
+      type: script
+      strictness: hard
+      script: ./scripts/prepare-correction-wave.mjs
+      input: research/quality/current-verdict.json
+      output: research/corrections/current.json
+      timeout_minutes: 1
+
+  - from: quality-audit
+    to: research-escalation
+    condition:
+      type: artifact_json
+      artifact: research/quality/current-verdict.json
+      pointer: /decision
+      operator: equals
+      value: ESCALATE
+
+  - from: quality-audit
+    to: research-escalation
+    condition:
+      type: artifact_json
+      artifact: research/quality/current-verdict.json
+      pointer: /decision
+      operator: equals
+      value: REVISE
+
+  - from: quality-audit
+    to: done
+    condition:
+      type: artifact_json
+      artifact: research/quality/current-verdict.json
+      pointer: /decision
+      operator: equals
+      value: APPROVE
+
+  - from: quality-audit
+    to: research-escalation
+    condition:
+      type: artifact_exists
+      artifact: research/quality/current-verdict.json

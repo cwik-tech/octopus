@@ -1,0 +1,415 @@
+{
+  "schemaVersion": 1,
+  "profiles": {
+    "business-report": {
+      "displayName": "Business Report",
+      "description": "Professional operational and client-facing business reports.",
+      "page": {
+        "widthDxa": 12240,
+        "heightDxa": 15840,
+        "marginDxa": 1260,
+        "headerFooterDxa": 620
+      },
+      "typography": {
+        "bodyFont": "Aptos",
+        "headingFont": "Aptos Display",
+        "codeFont": "Consolas",
+        "bodySize": 22,
+        "titleSize": 48,
+        "headingSizes": [34, 29, 25, 23, 21, 20],
+        "inlineCodeSize": 20,
+        "codeBlockSize": 19,
+        "tableSize": 19,
+        "footerSize": 17,
+        "lineSpacing": 276,
+        "paragraphAfter": 140
+      },
+      "layout": {
+        "headingBefore": [320, 285, 250, 215, 180, 145],
+        "headingAfter": [160, 145, 130, 115, 100, 85],
+        "titleAfter": 320,
+        "tocTitleBefore": 200,
+        "tocTitleAfter": 120,
+        "quoteIndentLeft": 540,
+        "quoteIndentRight": 180,
+        "quoteBefore": 80,
+        "quoteAfter": 160,
+        "quoteBorderSize": 12,
+        "quoteBorderSpace": 12,
+        "codeBefore": 80,
+        "codeAfter": 160,
+        "codeLineSpacing": 240,
+        "codeIndent": 180,
+        "listAfter": 120,
+        "listIndentPerLevel": 720,
+        "listHanging": 360,
+        "tableIndent": 120,
+        "tableCellMargin": 120,
+        "tableCellMarginVertical": 80,
+        "tableParagraphAfter": 40,
+        "tableLineSpacing": 228,
+        "tableBorderSize": 4,
+        "codeBorderSize": 4,
+        "dividerBefore": 100,
+        "dividerAfter": 180,
+        "dividerSize": 6,
+        "imageBefore": 120,
+        "imageAfter": 180
+      },
+      "colors": {
+        "ink": "243447",
+        "heading": "155E75",
+        "headingDark": "164E63",
+        "muted": "64748B",
+        "border": "CBD5E1",
+        "tableHeader": "E6F4F7",
+        "code": "F8FAFC",
+        "link": "0563C1"
+      },
+      "tableOfContents": {
+        "enabled": true,
+        "heading": "Table of Contents",
+        "depth": 3
+      },
+      "headerText": "Business Report",
+      "image": {
+        "maxWidthPx": 640,
+        "maxHeightPx": 720
+      },
+      "mermaid": {
+        "enabled": true,
+        "theme": "neutral",
+        "backgroundColor": "#FFFFFF",
+        "paddingPx": 24
+      }
+    },
+    "executive-summary": {
+      "displayName": "Executive Summary",
+      "description": "Compact decision documents for executives and boards.",
+      "page": {
+        "widthDxa": 12240,
+        "heightDxa": 15840,
+        "marginDxa": 1440,
+        "headerFooterDxa": 708
+      },
+      "typography": {
+        "bodyFont": "Aptos",
+        "headingFont": "Aptos Display",
+        "codeFont": "Consolas",
+        "bodySize": 23,
+        "titleSize": 52,
+        "headingSizes": [36, 30, 26, 23, 21, 20],
+        "inlineCodeSize": 20,
+        "codeBlockSize": 19,
+        "tableSize": 19,
+        "footerSize": 17,
+        "lineSpacing": 282,
+        "paragraphAfter": 150
+      },
+      "layout": {
+        "headingBefore": [300, 265, 230, 195, 160, 140],
+        "headingAfter": [150, 135, 120, 105, 90, 80],
+        "titleAfter": 300,
+        "tocTitleBefore": 180,
+        "tocTitleAfter": 110,
+        "quoteIndentLeft": 500,
+        "quoteIndentRight": 160,
+        "quoteBefore": 70,
+        "quoteAfter": 140,
+        "quoteBorderSize": 12,
+        "quoteBorderSpace": 12,
+        "codeBefore": 70,
+        "codeAfter": 140,
+        "codeLineSpacing": 240,
+        "codeIndent": 160,
+        "listAfter": 125,
+        "listIndentPerLevel": 720,
+        "listHanging": 360,
+        "tableIndent": 100,
+        "tableCellMargin": 110,
+        "tableCellMarginVertical": 70,
+        "tableParagraphAfter": 36,
+        "tableLineSpacing": 228,
+        "tableBorderSize": 4,
+        "codeBorderSize": 4,
+        "dividerBefore": 90,
+        "dividerAfter": 160,
+        "dividerSize": 6,
+        "imageBefore": 100,
+        "imageAfter": 160
+      },
+      "colors": {
+        "ink": "172033",
+        "heading": "1D4ED8",
+        "headingDark": "1E3A8A",
+        "muted": "64748B",
+        "border": "CBD5E1",
+        "tableHeader": "EFF6FF",
+        "code": "F8FAFC",
+        "link": "0563C1"
+      },
+      "tableOfContents": {
+        "enabled": false,
+        "heading": "Contents",
+        "depth": 2
+      },
+      "headerText": "Executive Summary",
+      "image": {
+        "maxWidthPx": 620,
+        "maxHeightPx": 680
+      },
+      "mermaid": {
+        "enabled": true,
+        "theme": "neutral",
+        "backgroundColor": "#FFFFFF",
+        "paddingPx": 22
+      }
+    },
+    "research-report": {
+      "displayName": "Research Report",
+      "description": "Long-form evidence-backed research and analysis.",
+      "page": {
+        "widthDxa": 12240,
+        "heightDxa": 15840,
+        "marginDxa": 1440,
+        "headerFooterDxa": 708
+      },
+      "typography": {
+        "bodyFont": "Calibri",
+        "headingFont": "Calibri",
+        "codeFont": "Consolas",
+        "bodySize": 22,
+        "titleSize": 48,
+        "headingSizes": [32, 26, 24, 22, 21, 20],
+        "inlineCodeSize": 20,
+        "codeBlockSize": 19,
+        "tableSize": 19,
+        "footerSize": 17,
+        "lineSpacing": 264,
+        "paragraphAfter": 120
+      },
+      "layout": {
+        "headingBefore": [320, 240, 160, 150, 140, 130],
+        "headingAfter": [160, 120, 80, 75, 70, 65],
+        "titleAfter": 320,
+        "tocTitleBefore": 200,
+        "tocTitleAfter": 120,
+        "quoteIndentLeft": 540,
+        "quoteIndentRight": 180,
+        "quoteBefore": 80,
+        "quoteAfter": 160,
+        "quoteBorderSize": 12,
+        "quoteBorderSpace": 12,
+        "codeBefore": 80,
+        "codeAfter": 160,
+        "codeLineSpacing": 240,
+        "codeIndent": 180,
+        "listAfter": 100,
+        "listIndentPerLevel": 720,
+        "listHanging": 360,
+        "tableIndent": 120,
+        "tableCellMargin": 120,
+        "tableCellMarginVertical": 80,
+        "tableParagraphAfter": 40,
+        "tableLineSpacing": 228,
+        "tableBorderSize": 4,
+        "codeBorderSize": 4,
+        "dividerBefore": 100,
+        "dividerAfter": 180,
+        "dividerSize": 6,
+        "imageBefore": 120,
+        "imageAfter": 180
+      },
+      "colors": {
+        "ink": "203748",
+        "heading": "2E74B5",
+        "headingDark": "1F4D78",
+        "muted": "667085",
+        "border": "D0D5DD",
+        "tableHeader": "F2F4F7",
+        "code": "F7F8FA",
+        "link": "0563C1"
+      },
+      "tableOfContents": {
+        "enabled": true,
+        "heading": "Table of Contents",
+        "depth": 3
+      },
+      "headerText": "Research Report",
+      "image": {
+        "maxWidthPx": 624,
+        "maxHeightPx": 720
+      },
+      "mermaid": {
+        "enabled": true,
+        "theme": "neutral",
+        "backgroundColor": "#FFFFFF",
+        "paddingPx": 24
+      }
+    },
+    "proposal": {
+      "displayName": "Proposal",
+      "description": "Structured commercial and project proposals.",
+      "page": {
+        "widthDxa": 12240,
+        "heightDxa": 15840,
+        "marginDxa": 1260,
+        "headerFooterDxa": 620
+      },
+      "typography": {
+        "bodyFont": "Aptos",
+        "headingFont": "Aptos Display",
+        "codeFont": "Consolas",
+        "bodySize": 22,
+        "titleSize": 50,
+        "headingSizes": [34, 29, 25, 23, 21, 20],
+        "inlineCodeSize": 20,
+        "codeBlockSize": 19,
+        "tableSize": 19,
+        "footerSize": 17,
+        "lineSpacing": 276,
+        "paragraphAfter": 140
+      },
+      "layout": {
+        "headingBefore": [320, 285, 250, 215, 180, 145],
+        "headingAfter": [160, 145, 130, 115, 100, 85],
+        "titleAfter": 320,
+        "tocTitleBefore": 200,
+        "tocTitleAfter": 120,
+        "quoteIndentLeft": 540,
+        "quoteIndentRight": 180,
+        "quoteBefore": 80,
+        "quoteAfter": 160,
+        "quoteBorderSize": 12,
+        "quoteBorderSpace": 12,
+        "codeBefore": 80,
+        "codeAfter": 160,
+        "codeLineSpacing": 240,
+        "codeIndent": 180,
+        "listAfter": 120,
+        "listIndentPerLevel": 720,
+        "listHanging": 360,
+        "tableIndent": 120,
+        "tableCellMargin": 120,
+        "tableCellMarginVertical": 80,
+        "tableParagraphAfter": 40,
+        "tableLineSpacing": 228,
+        "tableBorderSize": 4,
+        "codeBorderSize": 4,
+        "dividerBefore": 100,
+        "dividerAfter": 180,
+        "dividerSize": 6,
+        "imageBefore": 120,
+        "imageAfter": 180
+      },
+      "colors": {
+        "ink": "1F2937",
+        "heading": "7C3AED",
+        "headingDark": "5B21B6",
+        "muted": "6B7280",
+        "border": "D1D5DB",
+        "tableHeader": "F5F3FF",
+        "code": "F9FAFB",
+        "link": "0563C1"
+      },
+      "tableOfContents": {
+        "enabled": true,
+        "heading": "Proposal Contents",
+        "depth": 3
+      },
+      "headerText": "Proposal",
+      "image": {
+        "maxWidthPx": 640,
+        "maxHeightPx": 720
+      },
+      "mermaid": {
+        "enabled": true,
+        "theme": "neutral",
+        "backgroundColor": "#FFFFFF",
+        "paddingPx": 24
+      }
+    },
+    "instruction-manual": {
+      "displayName": "Instruction Manual",
+      "description": "Accessible step-by-step manuals with embedded screenshots.",
+      "page": {
+        "widthDxa": 12240,
+        "heightDxa": 15840,
+        "marginDxa": 1260,
+        "headerFooterDxa": 620
+      },
+      "typography": {
+        "bodyFont": "Aptos",
+        "headingFont": "Aptos Display",
+        "codeFont": "Consolas",
+        "bodySize": 22,
+        "titleSize": 48,
+        "headingSizes": [34, 29, 25, 23, 21, 20],
+        "inlineCodeSize": 20,
+        "codeBlockSize": 19,
+        "tableSize": 19,
+        "footerSize": 17,
+        "lineSpacing": 276,
+        "paragraphAfter": 140
+      },
+      "layout": {
+        "headingBefore": [320, 285, 250, 215, 180, 145],
+        "headingAfter": [160, 145, 130, 115, 100, 85],
+        "titleAfter": 320,
+        "tocTitleBefore": 200,
+        "tocTitleAfter": 120,
+        "quoteIndentLeft": 540,
+        "quoteIndentRight": 180,
+        "quoteBefore": 80,
+        "quoteAfter": 160,
+        "quoteBorderSize": 12,
+        "quoteBorderSpace": 12,
+        "codeBefore": 80,
+        "codeAfter": 160,
+        "codeLineSpacing": 240,
+        "codeIndent": 180,
+        "listAfter": 120,
+        "listIndentPerLevel": 720,
+        "listHanging": 360,
+        "tableIndent": 120,
+        "tableCellMargin": 120,
+        "tableCellMarginVertical": 80,
+        "tableParagraphAfter": 40,
+        "tableLineSpacing": 228,
+        "tableBorderSize": 4,
+        "codeBorderSize": 4,
+        "dividerBefore": 100,
+        "dividerAfter": 180,
+        "dividerSize": 6,
+        "imageBefore": 120,
+        "imageAfter": 180
+      },
+      "colors": {
+        "ink": "243447",
+        "heading": "155E75",
+        "headingDark": "164E63",
+        "muted": "64748B",
+        "border": "CBD5E1",
+        "tableHeader": "E6F4F7",
+        "code": "F8FAFC",
+        "link": "0563C1"
+      },
+      "tableOfContents": {
+        "enabled": true,
+        "heading": "Table of Contents",
+        "depth": 3
+      },
+      "headerText": "Instruction Manual",
+      "image": {
+        "maxWidthPx": 640,
+        "maxHeightPx": 720
+      },
+      "mermaid": {
+        "enabled": false,
+        "theme": "neutral",
+        "backgroundColor": "#FFFFFF",
+        "paddingPx": 24
+      }
+    }
+  }
+}

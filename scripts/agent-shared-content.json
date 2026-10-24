@@ -1,0 +1,249 @@
+{
+  "groups": [
+    {
+      "id": "argument-synthesis-consulting",
+      "canonical": "agents/client-lens/skills/argument-synthesis",
+      "copies": [
+        "agents/contrarian/skills/argument-synthesis",
+        "agents/crazy-man/skills/argument-synthesis",
+        "agents/domain-researcher/skills/argument-synthesis",
+        "agents/first-principles-fool/skills/argument-synthesis",
+        "agents/futurist/skills/argument-synthesis",
+        "agents/innovator/skills/argument-synthesis",
+        "agents/money-maker/skills/argument-synthesis",
+        "agents/moonshot/skills/argument-synthesis",
+        "agents/pattern-matcher/skills/argument-synthesis",
+        "agents/pragmatist/skills/argument-synthesis",
+        "agents/problem-decomposer/skills/argument-synthesis"
+      ]
+    },
+    {
+      "id": "argument-synthesis-vc",
+      "canonical": "agents/vc-contrarian-red-team/skills/argument-synthesis",
+      "copies": [
+        "agents/vc-deal-evaluator/skills/argument-synthesis",
+        "agents/vc-deal-structurer/skills/argument-synthesis",
+        "agents/vc-exit-strategist/skills/argument-synthesis",
+        "agents/vc-financial-modeler/skills/argument-synthesis",
+        "agents/vc-founder-assessor/skills/argument-synthesis",
+        "agents/vc-futurist-thesis-alignment/skills/argument-synthesis",
+        "agents/vc-legal-ip-due-diligence/skills/argument-synthesis",
+        "agents/vc-market-analyst/skills/argument-synthesis",
+        "agents/vc-pattern-matcher/skills/argument-synthesis",
+        "agents/vc-portfolio-strategist/skills/argument-synthesis",
+        "agents/vc-technology-evaluator/skills/argument-synthesis",
+        "agents/vc-thesis-defounder/skills/argument-synthesis",
+        "agents/vc-timing-deal-dynamics/skills/argument-synthesis",
+        "agents/vc-traction-analyst/skills/argument-synthesis",
+        "agents/vc-value-add-strategist/skills/argument-synthesis",
+        "agents/vc-wild-card/skills/argument-synthesis"
+      ]
+    },
+    {
+      "id": "batch-streaming-selection",
+      "canonical": "agents/data-engineering-lead/skills/batch-streaming-selection",
+      "copies": [
+        "agents/data-pipeline-engineer/skills/batch-streaming-selection",
+        "agents/data-quality-reliability-engineer/skills/batch-streaming-selection"
+      ]
+    },
+    {
+      "id": "creative-ideation",
+      "canonical": "agents/crazy-man/skills/creative-ideation",
+      "copies": [
+        "agents/innovator/skills/creative-ideation"
+      ]
+    },
+    {
+      "id": "crypto-plain-language-explainer",
+      "canonical": "agents/crypto-investment-lead/skills/crypto-plain-language-explainer",
+      "copies": [
+        "agents/crypto-early-signal-scout/skills/crypto-plain-language-explainer",
+        "agents/crypto-market-analyst/skills/crypto-plain-language-explainer",
+        "agents/crypto-portfolio-strategist/skills/crypto-plain-language-explainer",
+        "agents/crypto-risk-compliance-analyst/skills/crypto-plain-language-explainer",
+        "agents/crypto-token-diligence-analyst/skills/crypto-plain-language-explainer"
+      ]
+    },
+    {
+      "id": "data-architecture-design",
+      "canonical": "agents/data-engineering-lead/skills/data-architecture-design",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/skills/data-architecture-design",
+        "agents/data-pipeline-engineer/skills/data-architecture-design"
+      ]
+    },
+    {
+      "id": "data-design-review",
+      "canonical": "agents/data-engineering-lead/skills/data-design-review",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/skills/data-design-review",
+        "agents/data-pipeline-engineer/skills/data-design-review",
+        "agents/data-quality-reliability-engineer/skills/data-design-review"
+      ]
+    },
+    {
+      "id": "data-engineering-references",
+      "canonical": "agents/data-engineering-lead/references",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/references",
+        "agents/data-pipeline-engineer/references",
+        "agents/data-quality-reliability-engineer/references",
+        "agents/data-security-specialist/references",
+        "teams/data-engineering-team/references"
+      ]
+    },
+    {
+      "id": "data-engineering-templates",
+      "canonical": "agents/data-engineering-lead/templates",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/templates",
+        "agents/data-pipeline-engineer/templates",
+        "agents/data-quality-reliability-engineer/templates",
+        "agents/data-security-specialist/templates",
+        "teams/data-engineering-team/templates"
+      ]
+    },
+    {
+      "id": "data-incident-analysis",
+      "canonical": "agents/data-engineering-lead/skills/data-incident-analysis",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/skills/data-incident-analysis",
+        "agents/data-pipeline-engineer/skills/data-incident-analysis",
+        "agents/data-quality-reliability-engineer/skills/data-incident-analysis"
+      ]
+    },
+    {
+      "id": "data-integration-contracts",
+      "canonical": "agents/data-engineering-lead/skills/data-integration-contracts",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/skills/data-integration-contracts",
+        "agents/data-pipeline-engineer/skills/data-integration-contracts",
+        "agents/data-quality-reliability-engineer/skills/data-integration-contracts"
+      ]
+    },
+    {
+      "id": "data-model-design",
+      "canonical": "agents/data-engineering-lead/skills/data-model-design",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/skills/data-model-design",
+        "agents/data-quality-reliability-engineer/skills/data-model-design"
+      ]
+    },
+    {
+      "id": "data-platform-decision-record",
+      "canonical": "agents/data-engineering-lead/skills/data-platform-decision-record",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/skills/data-platform-decision-record",
+        "agents/data-pipeline-engineer/skills/data-platform-decision-record",
+        "agents/data-quality-reliability-engineer/skills/data-platform-decision-record"
+      ]
+    },
+    {
+      "id": "data-quality-rule-design",
+      "canonical": "agents/data-modeling-metadata-engineer/skills/data-quality-rule-design",
+      "copies": [
+        "agents/data-pipeline-engineer/skills/data-quality-rule-design",
+        "agents/data-quality-reliability-engineer/skills/data-quality-rule-design"
+      ]
+    },
+    {
+      "id": "data-security-checklist",
+      "canonical": "agents/data-engineering-lead/skills/data-security-checklist",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/skills/data-security-checklist",
+        "agents/data-pipeline-engineer/skills/data-security-checklist",
+        "agents/data-quality-reliability-engineer/skills/data-security-checklist",
+        "agents/data-security-specialist/skills/data-security-checklist"
+      ]
+    },
+    {
+      "id": "databricks-unity-catalog-governance",
+      "canonical": "agents/data-modeling-metadata-engineer/skills/databricks-unity-catalog-governance",
+      "copies": [
+        "agents/data-security-specialist/skills/databricks-unity-catalog-governance"
+      ]
+    },
+    {
+      "id": "domain-research",
+      "canonical": "agents/domain-researcher/skills/domain-research",
+      "copies": [
+        "agents/pattern-matcher/skills/domain-research"
+      ]
+    },
+    {
+      "id": "engagement-economics",
+      "canonical": "agents/money-maker/skills/engagement-economics",
+      "copies": [
+        "agents/pragmatist/skills/engagement-economics"
+      ]
+    },
+    {
+      "id": "metadata-lineage-design",
+      "canonical": "agents/data-engineering-lead/skills/metadata-lineage-design",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/skills/metadata-lineage-design",
+        "agents/data-pipeline-engineer/skills/metadata-lineage-design",
+        "agents/data-quality-reliability-engineer/skills/metadata-lineage-design"
+      ]
+    },
+    {
+      "id": "pipeline-observability",
+      "canonical": "agents/data-engineering-lead/skills/pipeline-observability",
+      "copies": [
+        "agents/data-pipeline-engineer/skills/pipeline-observability",
+        "agents/data-quality-reliability-engineer/skills/pipeline-observability"
+      ]
+    },
+    {
+      "id": "problem-decomposition",
+      "canonical": "agents/contrarian/skills/problem-decomposition",
+      "copies": [
+        "agents/first-principles-fool/skills/problem-decomposition",
+        "agents/problem-decomposer/skills/problem-decomposition"
+      ]
+    },
+    {
+      "id": "storage-pattern-selection",
+      "canonical": "agents/data-engineering-lead/skills/storage-pattern-selection",
+      "copies": [
+        "agents/data-modeling-metadata-engineer/skills/storage-pattern-selection",
+        "agents/data-pipeline-engineer/skills/storage-pattern-selection",
+        "agents/data-quality-reliability-engineer/skills/storage-pattern-selection"
+      ]
+    },
+    {
+      "id": "unslop",
+      "canonical": "agents/architect-agent-systems/skills/unslop",
+      "copies": [
+        "agents/architect-critic/skills/unslop",
+        "agents/architect-security-privacy/skills/unslop"
+      ]
+    },
+    {
+      "id": "vc-scorecard",
+      "canonical": "agents/vc-contrarian-red-team/skills/vc-scorecard",
+      "copies": [
+        "agents/vc-deal-structurer/skills/vc-scorecard",
+        "agents/vc-exit-strategist/skills/vc-scorecard",
+        "agents/vc-financial-modeler/skills/vc-scorecard",
+        "agents/vc-founder-assessor/skills/vc-scorecard",
+        "agents/vc-legal-ip-due-diligence/skills/vc-scorecard",
+        "agents/vc-market-analyst/skills/vc-scorecard",
+        "agents/vc-portfolio-strategist/skills/vc-scorecard",
+        "agents/vc-technology-evaluator/skills/vc-scorecard",
+        "agents/vc-thesis-defounder/skills/vc-scorecard",
+        "agents/vc-timing-deal-dynamics/skills/vc-scorecard",
+        "agents/vc-traction-analyst/skills/vc-scorecard",
+        "agents/vc-value-add-strategist/skills/vc-scorecard"
+      ]
+    }
+  ],
+  "forks": [
+    {
+      "path": "agents/vc-deal-evaluator/skills/vc-scorecard",
+      "of": "vc-scorecard",
+      "reason": "Adds the 'Information not provided' rule for missing diligence material. Kept as a deliberate variant."
+    }
+  ]
+}

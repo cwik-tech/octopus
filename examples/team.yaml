@@ -1,0 +1,146 @@
+# Brainstorm Team — Example
+#
+# A minimal 3-agent brainstorming team with 2 levels:
+# 1. Brainstorm (discussion) — facilitator coordinates creative + critic
+# 2. Refine (review) — creative produces, critic reviews
+#
+# Launch: cd examples/brainstorm-team && pi -e ../../team-runtime/index.ts
+#
+# Model Selection:
+#   A team decides nothing about models. Each agent runs with the provider and
+#   model its own file declares, and an agent that declares neither runs with
+#   the one application default from Settings.
+#   Supported: codex (default), deepseek, kimi, anthropic, openai, xai, openrouter, pi, gemini, lm-studio
+#   Example, in the agent's own file rather than here:
+#     ---
+#     name: creative
+#     provider: gemini
+#     model: gemini-2.5-pro
+#     ---
+#
+# Failure Recovery:
+#   Per-agent: on_failure with policy (retry|fallback|skip|halt), max_retries, fallback_agent
+#   Per-stage: on_agent_failure overrides all agents in that stage
+#   Defaults: critical stages (pipeline/chain/review) → retry(2)→halt
+#             additive stages (discussion/broadcast) → skip
+#
+# Context Window Management (discussion stages — omit for default 'full' behaviour):
+#   context_strategy: full           # full (default) | recent_N | rolling_summary
+#   context_window_rounds: 2         # recent_N only: keep last N rounds verbatim
+#   summarize_after_rounds: 3        # rolling_summary only: compress via haiku after N rounds
+#   See docs/feature-context-management.md
+#
+# Rate Limiting (top-level — throttles concurrent broadcast agent spawns):
+#   rate_limiting:
+#     max_concurrent: 2              # max simultaneous agent subprocesses (default: 3)
+#     delay_between_ms: 500          # ms delay after semaphore acquire (default: 500)
+#   See docs/feature-rate-limiting.md
+
+team:
+  name: brainstorm-team
+  description: Creative brainstorming team — generate and refine ideas
+  version: '0.1.0'
+
+workspace:
+  path: workspace
+  watch: false
+
+workflow:
+  entry_level: brainstorm
+  capabilities:
+    - brainstorming
+    - ideation
+  invocation_modes:
+    - user
+    - team
+  user_facing: true
+  output_contract:
+    artifacts:
+      - path: refined-output.md
+        required: true
+        description: Final refined deliverable returned by the template.
+    completion_artifact: refined-output.md
+
+agents:
+  - name: facilitator
+    type: agent
+    role: Facilitates brainstorming sessions, synthesizes ideas, drives convergence
+    tools:
+      - set_roster
+      - create_brief
+      - converse
+    agent_file: agents/facilitator/facilitator.md
+    color: 178
+
+  - name: creative
+    type: agent
+    role: Generates creative ideas, makes unexpected connections, pushes boundaries
+    tools: []
+    agent_file: agents/creative/creative.md
+    color: 36
+    on_failure:
+      policy: retry
+      max_retries: 2
+
+  - name: critic
+    type: agent
+    role: Evaluates ideas for feasibility, identifies risks, strengthens proposals
+    tools: []
+    agent_file: agents/critic/critic.md
+    color: 168
+    on_failure:
+      policy: retry
+      max_retries: 1
+      fallback_agent: creative
+
+levels:
+  - id: brainstorm
+    name: Brainstorming
+    order: 0
+    stage:
+      type: discussion
+      coordinator: facilitator
+      participants:
+        - creative
+        - critic
+      on_agent_failure: skip
+      config:
+        mode: brainstorm
+        min_rounds: 1
+        max_rounds: 3
+        # context_strategy: rolling_summary  # full (default) | recent_N | rolling_summary
+        # summarize_after_rounds: 3          # rolling_summary: compress via haiku after N rounds
+        # context_window_rounds: 2           # recent_N: keep last N rounds verbatim
+        constraints:
+          max_time_minutes: 5
+          max_budget_usd: 5
+        output:
+          format: ideas-summary.md
+
+  - id: refine
+    name: Refinement
+    order: 1
+    stage:
+      type: review
+      producer: creative
+      reviewer: critic
+      config:
+        max_iterations: 2
+        constraints:
+          max_time_minutes: 3
+          max_budget_usd: 3
+        output:
+          format: refined-output.md
+
+gates:
+  - from: brainstorm
+    to: refine
+    condition:
+      type: artifact_exists
+      artifact: ideas-summary.md
+    transform:
+      type: script
+      script: scripts/transform.mjs
+      input: ideas-summary.md
+      output: ideas-summary-refined.md
+      strictness: off

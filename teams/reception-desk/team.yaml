@@ -1,0 +1,99 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Reception Desk
+#
+# Default entrypoint team. The user talks only to the receptionist. The
+# receptionist gathers minimal intake, chooses the right specialist team, and
+# delegates the request without producing the substantive deliverable.
+# ─────────────────────────────────────────────────────────────────────────────
+
+team:
+  name: reception-desk
+  description: >
+    Default intake team. A single receptionist agent handles the initial
+    conversation, gathers only the intake needed for routing, and delegates to
+    the right specialist team.
+  version: '0.1.0'
+
+workspace:
+  path: ../../workspace
+  watch: false
+
+workflow:
+  entry_level: intake
+  capabilities:
+    - intake
+    - routing
+    - delegation
+  invocation_modes:
+    - user
+    - external
+  user_facing: false
+  output_contract:
+    artifacts:
+      - path: job-request.md
+        required: false
+        description: Runtime-owned normalized intake request for the delegated team.
+      - path: routing-decision.md
+        required: true
+        description: Final routing or delegation decision from intake.
+    completion_artifact: routing-decision.md
+
+agents:
+  - name: receptionist
+    type: agent
+    role: >
+      Intake and routing agent. Clarifies the request only as much as needed,
+      then delegates to the right specialist team and does not author the
+      substantive response itself. Standard writing requests should be routed
+      immediately without optional audience/purpose questioning.
+    tools:
+      - spawn_team
+      - spawn_workflow
+      - inspect-task-state
+    agent_file: ../../agents/receptionist/receptionist.md
+    experience_enabled: true
+    color: 208
+    produces:
+      - path: job-request.md
+      - path: routing-decision.md
+
+  - name: web-researcher
+    type: agent
+    role: Fast external fact-checking and dated source verification.
+    tools:
+      - read
+      - research_web
+    agent_file: ../../agents/web-researcher/web-researcher.md
+    experience_enabled: false
+    color: 45
+
+composition:
+  team_registry: ../../teams.yaml
+  spawn_limits:
+    max_depth: 3
+    max_concurrent: 2
+    max_total_budget_usd: 50
+
+levels:
+  - id: intake
+    name: Intake
+    order: 0
+    permissions:
+      spawn_teams: true
+    stage:
+      type: routing
+      coordinator: receptionist
+      config:
+        constraints:
+          max_time_minutes: 10
+          max_budget_usd: 10
+        output:
+          format: routing-decision.md
+          user_review: false
+
+gates:
+  - from: intake
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: routing-decision.md

@@ -1,0 +1,60 @@
+team:
+  name: openrouter-minimal-smoke
+  description: Minimal OpenRouter-backed smoke fixture
+
+defaults:
+  provider: openrouter
+
+workspace:
+  path: workspace
+  watch: false
+
+models:
+  orchestration:
+    model: openai/gpt-4o-mini
+    thinking: low
+    provider: openrouter
+  strategic:
+    model: openai/gpt-4o-mini
+    thinking: low
+    provider: openrouter
+
+agents:
+  - name: orchestrator
+    type: agent
+    role: Runs the minimal OpenRouter smoke flow
+    tier: orchestration
+    tools:
+      - dispatch
+    agent_file: agents/orchestrator/orchestrator.md
+
+  - name: worker
+    type: agent
+    role: Writes the requested OpenRouter output file
+    tier: strategic
+    tools: []
+    agent_file: agents/worker/worker.md
+
+levels:
+  - id: smoke-pipeline
+    name: Smoke Pipeline
+    order: 0
+    stage:
+      type: pipeline
+      coordinator: orchestrator
+      config:
+        plan_file: plan.md
+        parallel: false
+        constraints:
+          max_time_minutes: 5
+          max_budget_usd: 2
+        gate:
+          type: artifact_exists
+          strictness: hard
+
+gates:
+  - from: smoke-pipeline
+    to: done
+    condition:
+      type: artifact_exists
+      artifact: openrouter-smoke-report.md

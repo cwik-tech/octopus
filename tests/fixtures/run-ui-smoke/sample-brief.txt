@@ -1,0 +1,17 @@
+# Sample Brief
+
+This is a tiny fixture used by the Run UI smoke test.
+
+The smoke test uploads this file to a session and asserts that the
+file-parser produces an entry under the session's `inputs/parsed/`
+directory.
+
+Key facts to retain after parsing:
+- Project name: AcmeWidget v0
+- Owner: Eng team
+- Vault code: SMOKE-VAULT-AZUREFALCON-4738
+- Intended outcome: validate the round-trip from upload to parse
+
+The smoke journey asks the Receptionist for the vault code above. That
+value exists only in this file, so a grounded answer is impossible unless
+the parsed file context actually reached the chat provider.

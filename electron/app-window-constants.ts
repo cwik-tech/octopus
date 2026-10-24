@@ -1,0 +1,10 @@
+export const OPEN_WINDOW_CHANNEL = 'pipeline:open-window'
+export const REPORT_WINDOW_SESSION_CHANNEL = 'pipeline:report-window-session'
+export const ANNOUNCE_SESSION_CHANGED_CHANNEL = 'pipeline:announce-session-changed'
+export const INITIAL_SESSION_HASH_KEY = 'pipeline-initial-session'
+export const INITIAL_CANVAS_HASH_KEY = 'pipeline-canvas-session'
+export const GET_CANVAS_WINDOW_STATE_CHANNEL = 'pipeline:get-canvas-window-state'
+export const CANVAS_WINDOW_STATE_CHANNEL = 'pipeline:canvas-window-state'
+export const OPEN_WINDOW_LOAD_TIMEOUT_MS = 20_000
+export const NEW_WINDOW_CASCADE_OFFSET = 32
+export const APP_WINDOW_DEFAULT_SIZE = { width: 1440, height: 920 }

@@ -1,0 +1,11 @@
+reception-desk:
+  type: team
+  description: Deterministic receptionist fixture for end-to-end delegation tests
+  team_path: ./teams/reception-desk
+
+writing-team:
+  type: team
+  description: Deterministic writing team fixture for delegation tests
+  team_path: ./teams/writing-team
+  input_artifact: incoming-brief.md
+  output_artifact: final-draft.md

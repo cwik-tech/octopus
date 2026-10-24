@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "profiles": {
+    "business-workbook": {
+      "displayName": "Business Workbook",
+      "description": "Polished multi-sheet workbook for business reporting with styled headers, zebra rows, and filters.",
+      "fonts": {
+        "body": "Calibri",
+        "bodySize": 11,
+        "headerSize": 11,
+        "titleSize": 16,
+        "noteSize": 10
+      },
+      "colors": {
+        "ink": "1F2933",
+        "title": "102A43",
+        "headerText": "FFFFFF",
+        "headerFill": "243B53",
+        "zebraFill": "F0F4F8",
+        "note": "627D98",
+        "border": "BCCCDC"
+      },
+      "table": {
+        "zebraStripes": true,
+        "autoFilter": true,
+        "freezeHeaderRow": true,
+        "minColumnWidth": 10,
+        "maxColumnWidth": 60,
+        "columnPadding": 3
+      },
+      "numberFormats": {
+        "integer": "#,##0",
+        "decimal": "#,##0.00",
+        "currency": "#,##0.00",
+        "percent": "0.0%",
+        "date": "yyyy-mm-dd"
+      },
+      "sheet": {
+        "includeTitleRow": true
+      }
+    },
+    "financial-model": {
+      "displayName": "Financial Model",
+      "description": "Dense numeric layout for financial data with two-decimal precision and frozen headers.",
+      "fonts": {
+        "body": "Calibri",
+        "bodySize": 10,
+        "headerSize": 10,
+        "titleSize": 14,
+        "noteSize": 9
+      },
+      "colors": {
+        "ink": "1F2933",
+        "title": "1B4332",
+        "headerText": "FFFFFF",
+        "headerFill": "2D6A4F",
+        "zebraFill": "F1F7F4",
+        "note": "52796F",
+        "border": "B7CEC5"
+      },
+      "table": {
+        "zebraStripes": false,
+        "autoFilter": true,
+        "freezeHeaderRow": true,
+        "minColumnWidth": 12,
+        "maxColumnWidth": 40,
+        "columnPadding": 2
+      },
+      "numberFormats": {
+        "integer": "#,##0",
+        "decimal": "#,##0.00",
+        "currency": "#,##0.00",
+        "percent": "0.00%",
+        "date": "yyyy-mm-dd"
+      },
+      "sheet": {
+        "includeTitleRow": true
+      }
+    },
+    "plain-data": {
+      "displayName": "Plain Data",
+      "description": "Minimal unstyled grid for data interchange: bold headers only, no fills, no filters.",
+      "fonts": {
+        "body": "Calibri",
+        "bodySize": 11,
+        "headerSize": 11,
+        "titleSize": 11,
+        "noteSize": 10
+      },
+      "colors": {
+        "ink": "000000",
+        "title": "000000",
+        "headerText": "000000",
+        "headerFill": "FFFFFF",
+        "zebraFill": "FFFFFF",
+        "note": "666666",
+        "border": "D9D9D9"
+      },
+      "table": {
+        "zebraStripes": false,
+        "autoFilter": false,
+        "freezeHeaderRow": false,
+        "minColumnWidth": 8,
+        "maxColumnWidth": 80,
+        "columnPadding": 2
+      },
+      "numberFormats": {
+        "integer": "0",
+        "decimal": "0.00",
+        "currency": "#,##0.00",
+        "percent": "0.0%",
+        "date": "yyyy-mm-dd"
+      },
+      "sheet": {
+        "includeTitleRow": false
+      }
+    }
+  }
+}
